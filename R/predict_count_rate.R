@@ -1,15 +1,15 @@
 #' Title
 #'
-#' @param input_data 
-#' @param photon_energy_keV 
-#' @param yield 
-#' @param activity_Bq 
-#' @param cpm 
-#' @param net_counts 
-#' @param count_rate_derivative 
-#' @param cumulative_counts 
-#' @param collection_time_s 
-#' @param speed_cm_s 
+#' @param input_data
+#' @param photon_energy_keV
+#' @param yield
+#' @param activity_Bq
+#' @param cpm
+#' @param net_counts
+#' @param count_rate_derivative
+#' @param cumulative_counts
+#' @param collection_time_s
+#' @param speed_cm_s
 #'
 #' @return
 #' @export
@@ -77,7 +77,7 @@ predict_count_rate <- function(
 
     for (i in 1:data_length) {
         subset_i <- input_data[
-            output_data$y_cm[i] == input_data$y_cm 
+            output_data$y_cm[i] == input_data$y_cm
             & output_data$contents[i] == input_data$contents, ]
 
         output_data$count_rate[i] <- activity_Bq * sum(

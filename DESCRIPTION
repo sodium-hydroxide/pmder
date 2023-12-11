@@ -2,11 +2,15 @@ Package: pmder
 Type: Package
 Title: Stationary Portal Monitor Detection Efficiency
 Version: 0.0.1
-Author: Noah J. Blair and Alex Brandl
+Author: Noah J. Blair and Alexander Brandl
 Maintainer: Noah J. Blair <noahjblair@outlook.com>
 Description: pmder contains data and functions for computing the absolute efficiency of a polyvinyl-toluene plastic scintillator modeled using MCNP. The predicted efficiencies are given as a function of the source energy (keV), truck position (cm), and truck contents (foodstuff or metal). There are capabilities of determining the absolute efficiency based on the original model, and creating a new method given intrinsic efficiency data for the detector.
 License: Apache License (>= 2)
 Encoding: UTF-8
 LazyData: true
-Imports: btools
+Imports: 
+    btools,
+    dplyr,
+    hypergeo,
+    pracma
 RoxygenNote: 7.2.3
