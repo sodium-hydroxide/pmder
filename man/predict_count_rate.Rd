@@ -2,7 +2,7 @@
 % Please edit documentation in R/predict_count_rate.R
 \name{predict_count_rate}
 \alias{predict_count_rate}
-\title{Title}
+\title{Predict count rate!}
 \usage{
 predict_count_rate(
   input_data,
@@ -10,7 +10,6 @@ predict_count_rate(
   yield,
   activity_Bq = 1,
   method = "earth",
-  earth_data = earth_model,
   cpm = FALSE,
   net_counts_rolling = FALSE,
   net_counts_cumulative = FALSE,
@@ -20,8 +19,31 @@ predict_count_rate(
 )
 }
 \arguments{
-\item{speed_cm_s}{}
+\item{input_data}{Dataframe, containing truck positions labeled as `y_cm` and contents labeled as `contents`}
+
+\item{photon_energy_keV}{Vector of float, source emission energies in keV}
+
+\item{yield}{Vector of float, must be same length as photon_energy_keV. For discrete sources, this be the fraction of the time a photon with the corresponding energy is emitted following radioactive decay. For continuous sources, these two vectors should be used to generate a discrete approximation.}
+
+\item{activity_Bq}{Activity of radioactive source in Bq. Defaults to 1 Bq.}
+
+\item{method}{`c("earth", "lm", "interpolate")` String, defaults to earth. Choose which model to use when predicting the count rate.}
+
+\item{cpm}{Boolean, defaults to FALSE. The results for the count rate and count rate derivative are given in cps and cps / s respectively. When true, the units are cpm and cpm / s.}
+
+\item{net_counts_rolling}{If the linear model is used and `net_counts_rolling = TRUE`, the net counts from the previous amount of time will be calculated. This requires the `collection_time_s` and `speed_cm_s` to be specified.}
+
+\item{net_counts_cumulative}{If the linear model is used and `net_counts_cumulative = TRUE`, the cummulative net counts will be calculated. This requires the `speed_cm_s` to be specified.}
+
+\item{count_rate_derivative}{If the linear model is used and `count_rate_derivative`, the time derivative of the count rate will be calculated. This requires the `speed_cm_s` to be specified.}
+
+\item{collection_time_s}{Float, parameter to be used if `net_counts_rolling = TRUE`. The time in seconds of collection.}
+
+\item{speed_cm_s}{Float, parameter to be used if calculating net counts or count rate derivative. The speed of the truck in cm / s.}
+}
+\value{
+Dataframe, input data frame with the count rate, its uncertainty, any other net counts / count rate derivative parameters specified.
 }
 \description{
-Title
+Predict count rate!
 }

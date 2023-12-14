@@ -1,6 +1,14 @@
+#' Multiplicative factor for net counts
+#'
+#' Multiplicative factor to get from net count rate to net counts. Called by `predict_count_rate`.
+#'
+#' @param x1 Final position in cm
+#' @param x2 Initial position in cm
+#'
+#' @return Vector containing multiplicative factors for each set of positions
+#' @export
+#'
 integrated_counts_factor <- function(x1, x2) {
-    require(hypergeo)
-    require(pracma)
 
     beta <- -4.031354552443670
     yperp <- 179.5

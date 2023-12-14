@@ -4,18 +4,20 @@
 \alias{predict_efficiency}
 \title{Predict absolute efficiency}
 \usage{
-predict_efficiency(input_data)
+predict_efficiency(input_data, method = "earth")
 }
 \arguments{
 \item{input_data}{Dataframe containing columns Es_keV, y_cm, contents.
-These are respectively, the source energy in keV, the perpendicular 
+These are respectively, the source energy in keV, the perpendicular
 distance in cm, and the contents ("m" for scrap metal and "f" for
 foodstuff).}
+
+\item{method}{`c("earth", "lm", "interpolate")` String, defaults to earth. Choose which model to use when predicting the intrinsic efficiency.}
 }
 \value{
 The original dataframe with additional columns efficiency and
-urel_efficiency, which are the absolute efficiency of detection and
-the relative standard uncertainty.
+ugeom_efficiency, which are the absolute efficiency of detection and
+the geometric standard uncertainty.
 }
 \description{
 Predict absolute efficiency
