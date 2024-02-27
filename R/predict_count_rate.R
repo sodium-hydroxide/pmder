@@ -89,7 +89,7 @@ predict_count_rate <- function(
 
     # Interpolated method has standard efficiency, not geometric
     if (method == "interpolate") {
-        input_data$ugeom_count_rate <- input_data$u_count_rate
+        input_data$ugeom_efficiency <- input_data$u_efficiency
     }
 
     for (i in 1:data_length) {
@@ -128,13 +128,13 @@ predict_count_rate <- function(
         output_data$count_rate <- output_data$count_rate * 60
     }
 
-    # # Interpolated method has standard efficiency, not geometric
-    # if (method == "interpolate") {
-    #     output_data$u_count_rate <- ouput_data$ugeom_count_rate
-    #     ouput_data$ugeom_count_rate <- NULL
-    #
-    #     if (cpm) {output_data$u_count_rate <- output_data$u_count_rate * 60}
-    # }
+    # Interpolated method has standard efficiency, not geometric
+    if (method == "interpolate") {
+        output_data$u_count_rate <- output_data$ugeom_count_rate * activity_Bq
+        output_data$ugeom_count_rate <- NULL
+
+        if (cpm) {output_data$u_count_rate <- output_data$u_count_rate * 60}
+    }
 
     if (count_rate_derivative) {
         output_data$count_rate_derivative <- (
