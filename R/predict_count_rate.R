@@ -87,6 +87,11 @@ predict_count_rate <- function(
     output_data$count_rate <- 0
     output_data$ugeom_count_rate <- 0
 
+    # Interpolated method has standard efficiency, not geometric
+    if (method == "interpolate") {
+        input_data$ugeom_count_rate <- input_data$u_count_rate
+    }
+
     for (i in 1:data_length) {
         subset_i <- input_data[
             output_data$y_cm[i] == input_data$y_cm
