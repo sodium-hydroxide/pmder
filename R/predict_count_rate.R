@@ -104,12 +104,6 @@ predict_count_rate <- function(
             (subset_i$ugeom_efficiency * subset_i$yield) ^ 2))
     }
 
-    # Interpolated method has standard efficiency, not geometric
-    if (method == "interpolate") {
-        output_data$u_count_rate <- ouput_data$ugeom_count_rate
-        ouput_data$ugeom_count_rate <- NULL
-    }
-
     if (net_counts_cumulative) {
         output_data$net_counts_cumulative <- (
             (output_data$count_rate / speed_cm_s)
