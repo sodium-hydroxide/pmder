@@ -28,6 +28,7 @@ predict_count_rate <- function(
         collection_time_s = NULL,
         speed_cm_s = NULL) {
 
+    # Checks that sufficient information is provided ----
     if (method %in% c("earth", "interpolate") & (
         net_counts_rolling
         | net_counts_cumulative
@@ -74,6 +75,39 @@ predict_count_rate <- function(
         sep = "\n"))
     }
 
+    # Subroutine for calculating integrated counts ----
+    integrated_counts_factor <- function(
+        # Final position in cm
+        x1,
+        # Initial position in cm
+        x2) {
+
+        beta <- -4.031354552443670
+        yperp <- 179.5
+
+        coefficient <- (
+            (yperp ^ beta)
+            / ((x1 ^ 2) + (yperp ^ 2)) ^ (beta / 2)
+        )
+
+        geometric1 <- pracma::Real(hypergeo::hypergeo(
+            A = 0.5,
+            B = -0.5 * beta,
+            C = 1.5,
+            z = -1 * ((x1 ^ 2) / (yperp ^ 2))
+        ))
+
+        geometric2 <- pracma::Real(hypergeo::hypergeo(
+            A = 0.5,
+            B = -0.5 * beta,
+            C = 1.5,
+            z = -1 * ((x2 ^ 2) / (yperp ^ 2))
+        ))
+
+        return(coefficient * ((x1 * geometric1) - (x2 * geometric2)))
+    }
+
+    # Obtaining efficiency for each energy ----
     data_length <- nrow(input_data)
     output_data <- input_data
 
@@ -104,6 +138,7 @@ predict_count_rate <- function(
             (subset_i$ugeom_efficiency * subset_i$yield) ^ 2))
     }
 
+    # Net counts on whole path ----
     if (net_counts_cumulative) {
         output_data$net_counts_cumulative <- (
             (output_data$count_rate / speed_cm_s)
@@ -114,6 +149,7 @@ predict_count_rate <- function(
         )
     }
 
+    # Net counts between two points ----
     if (net_counts_rolling) {
         output_data$net_counts_rolling <- (
             (output_data$count_rate / speed_cm_s)
