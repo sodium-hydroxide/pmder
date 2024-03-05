@@ -1,0 +1,513 @@
+          Code Name & Version = MCNP_6.20, 6.2.0
+  
+     _/      _/        _/_/_/       _/      _/       _/_/_/         _/_/_/ 
+    _/_/  _/_/      _/             _/_/    _/       _/    _/     _/        
+   _/  _/  _/      _/             _/  _/  _/       _/_/_/       _/_/_/     
+  _/      _/      _/             _/    _/_/       _/           _/    _/    
+ _/      _/        _/_/_/       _/      _/       _/             _/_/       
+  
+  +-----------------------------------------------------------------------+
+  | Copyright (2018).  Los Alamos National Security, LLC.  All rights     !
+  | reserved.                                                             !
+  |  This material was produced under U.S. Government contract            !
+  | DE-AC52-06NA25396 for Los Alamos National Laboratory, which is        !
+  | operated by Los Alamos National Security, LLC for the U.S.            !
+  | Department of Energy. The Government is granted for itself and        !
+  | others acting on its behalf a paid-up, nonexclusive, irrevocable      !
+  | worldwide license in this material to reproduce, prepare derivative   !
+  | works, and perform publicly and display publicly. Beginning five (5)  !
+  | years after February 14, 2018, subject to additional five-year        !
+  | worldwide renewals, the Government is granted for itself and others   !
+  | acting on its behalf a paid-up, nonexclusive, irrevocable worldwide   !
+  | license in this material to reproduce, prepare derivative works,      !
+  | distribute copies to the public, perform publicly and display         !
+  | publicly, and to permit others to do so. NEITHER THE UNITED STATES    !
+  | NOR THE UNITED STATES DEPARTMENT OF ENERGY, NOR LOS ALAMOS NATIONAL   !
+  | SECURITY, LLC, NOR ANY OF THEIR EMPLOYEES, MAKES ANY WARRANTY,        !
+  | EXPRESS OR IMPLIED, OR ASSUMES ANY LEGAL LIABILITY OR RESPONSIBILITY  !
+  | FOR THE ACCURACY, COMPLETENESS, OR USEFULNESS OF ANY INFORMATION,     !
+  | APPARATUS, PRODUCT, OR PROCESS DISCLOSED, OR REPRESENTS THAT ITS USE  !
+  | WOULD NOT INFRINGE PRIVATELY OWNED RIGHTS.                            !
+  +-----------------------------------------------------------------------+
+  
+1mcnp     version 6.mpi ld=07/01/21                     10/06/23 12:45:32 
+ *************************************************************************                 probid =  10/06/23 12:45:32 
+ i=in_f_m1500_0dot55.mcnp o=out_f_m1500_0dot55.mcnpout r=run_f_m1500_0dot55 xsdir
+
+ =/home/dbo/MY_MCNP/MCNP_DATA/xsdir_mcnp6.2
+
+ 
+  comment.  Physics models disabled.
+         1-       f_m1500_0dot55
+         2-       c
+         3-       c cccccccccccccccccccccccccccccc
+         4-       c                              c
+         5-       c  CELL CARD BLOCK             c
+         6-       c                              c
+         7-       c cccccccccccccccccccccccccccccc
+         8-       c
+         9-       c  Define the void and global geometry
+        10-       1    0             1 IMP:N=0 IMP:P=0          $ Void
+        11-       10   4 -1.520000 -11 IMP:N=0 IMP:P=1          $ Ground
+        12-       20   3 -1.032000 -21 IMP:N=0 IMP:P=2          $ Concrete roadway
+        13-       30   1 -0.001205 -31 41 51 61 IMP:N=0 IMP:P=2 $ Air
+        14-       c  Truck cell cards
+        15-       40   7 -2.698900  -41 42 IMP:N=0 IMP:P=2 $ Truck shell
+        16-       45   8 -0.5006025 -42    IMP:N=0 IMP:P=2 $ Truck interior
+        17-       c  Detector cell cards
+        18-       50   5 -7.820000  -51 52 IMP:N=0 IMP:P=2 $ PVT shell
+        19-       51   1 -0.001205  -52 53 IMP:N=0 IMP:P=2 $ PVT Air Gap
+        20-       52   6 -11.350000 -53 54 IMP:N=0 IMP:P=2 $ PVT Lead Shield
+        21-       53   2 -2.250000  -54 IMP:N=0 IMP:P=2    $ PVT Scintillator
+        22-       c  Detector cell cards
+        23-       60   5 -7.820000  -61 62 IMP:N=0 IMP:P=2 $ PVT Steel shell
+        24-       61   1 -0.001205  -62 63 IMP:N=0 IMP:P=2 $ PVT Air Gap
+        25-       62   6 -11.350000 -63 64 IMP:N=0 IMP:P=2 $ PVT Lead Shield
+        26-       63   2 -2.250000  -64 IMP:N=0 IMP:P=2    $ PVT Scintillator
+        27-       c
+        28-       c  END OF CELL CARDS LEAVE FOLLOWING LINE BLANK AS DELIMINATER
+        29-       
+        30-       c cccccccccccccccccccccccccccccc
+        31-       c                              c
+        32-       c  SURFACE CARD BLOCK          c
+        33-       c                              c
+        34-       c cccccccccccccccccccccccccccccc
+        35-       c
+        36-       c  World for Simulation
+        37-       1  RPP -750 750 -2500 2500 -20 600
+        38-       c
+        39-       c  The ground is the lower half of the simulation space
+        40-       11   RPP -750 750 -2500 2500 -20 -10
+        41-       c
+        42-       c  The concrete will be a layer in the ground
+        43-       21   RPP -750 750 -2500 2500 -10 0
+        44-       c  Air
+        45-       c      width =  cm (X)
+        46-       c     length =  cm (Y)
+        47-       c     height =  cm (Z)
+        48-       31   RPP -750 750 -2500 2500 0 600
+        49-       c
+        50-       41   RPP -130.000 130.000 -1926.72 -1073.28 130.5 411.5000 $ Outer truck layer
+        51-       42   RPP -129.878 129.878 -1926.598 -1073.402 134.0 411.398 $ Inner truck layer
+        52-       c  These cards will form the geometry of the left RPM
+        53-       c    xmin  xmax  ymin   ymax  zmin zmax
+        54-       51   RPP -204.54 -179.54 -86.64 86.64 60.00 239.28 $ PVT shell exterior
+        55-       52   RPP -201.54 -179.54 -83.64 83.64 63.00 236.28 $ PVT shell interior
+        56-       53   RPP -201.54 -192.10 -78.64 78.64 78.00 231.28 $ PVT shield exterior
+        57-       54   RPP -200.90 -192.10 -78.00 78.00 78.64 230.64 $ PVT shield exterior
+        58-       c  These cards will form the geometry of the right RPM
+        59-       c    xmin  xmax  ymin   ymax  zmin zmax
+        60-       61   RPP 179.54 204.54 -86.64 86.64 60.00 239.28 $ PVT shell exterior
+        61-       62   RPP 179.54 201.54 -83.64 83.64 63.00 236.28 $ PVT shell interior
+        62-       63   RPP 192.10 201.54 -78.64 78.64 78.00 231.28 $ PVT shield exterior
+        63-       64   RPP 192.10 200.90 -78.00 78.00 78.64 230.64 $ PVT shield exterior
+        64-       c
+        65-       c  END OF SURFACE CARDS LEAVE FOLLOWING LINE BLANK AS DELIMINATER
+        66-       
+        67-       c cccccccccccccccccccccccccccccc
+        68-       c                              c
+        69-       c  DATA CARD BLOCK             c
+        70-       c                              c
+        71-       c cccccccccccccccccccccccccccccc
+        72-       c
+        73-       c cccccccccccccccccccccccccccccc
+        74-       c  MATERIALS CARD BLOCK        c
+        75-       c cccccccccccccccccccccccccccccc
+        76-       c
+        77-       c  Air (Dry, Near Sea Level)
+        78-       c    Mass Density (g/cm3): = 0.001205
+        79-       M1   006000 -0.000124 $ $ Atomic carbon
+        80-            007000 -0.755268 $ Atomic nitrogen
+        81-            008000 -0.231781 $ Atomic oxygen
+        82-            018000 -0.012827 $ Atomic argon
+        83-       c
+        84-       c  Polyvinyl Toluene
+        85-       c    Mass Density (g/cm3): = 2.250000
+        86-       M2   001000 -0.085000 $
+        87-            006000 -0.915000 $
+        88-       c
+        89-       c  Concrete, Los Alamos (MCNP)
+        90-       c    Mass Density (g/cm3): = 1.032000
+        91-       M3   001000 -0.004530 $ -nat
+        92-            008000 -0.512600 $ -nat
+        93-            011000 -0.015270 $ -nat
+        94-            013000 -0.035550 $ -nat
+        95-            014000 -0.360360 $ -nat
+        96-            020000 -0.057910 $ -nat
+        97-            026000 -0.013780 $ -nat
+        98-       c
+        99-       c  Earth, Typical Western U.S.
+       100-       c    Mass Density (g/cm3): = 1.520000
+       101-       M4   001000 -0.023834 $
+       102-            008000 -0.598898 $
+       103-            013000 -0.080446 $
+       104-            014000 -0.296821 $
+       105-       c
+       106-       c  PVT Holder material
+       107-       c  Steel, Carbon
+       108-       c     Mass Density (g/cm3): = 7.820000
+       109-       M5   006000 -0.005000 $
+       110-            026000 -0.995000 $
+       111-       c
+       112-       c  Lead
+       113-       c     Mass Density (g/cm3): = 11.350000
+       114-       M6   082000 -1.000000 $
+       115-       c
+       116-       c  Truck Shell
+       117-       c  Steel, Stainless 202
+       118-       c     Mass Density (g/cm3): = 2.698900
+       119-       M7   013000 -1.000000 $ Aluminum-nat
+       120-       c
+       121-       c  Truck Interior, Food Stuffs
+       122-       c     Mass Density (g/cm3): = 0.5006025
+       123-       M8   001000 -0.104346262753382    $ Hydrogen-nat
+       124-            006000 -0.231910697030079    $ Carbon-nat
+       125-            007000 -0.0257590582747789   $ Nitrogen-nat
+       126-            008000 -0.629758437188188    $ Oxygen-nat
+       127-            011000 -0.00112863998881348  $ Sodium-nat
+       128-            012000 -0.000129843538536064 $ Magnesium-nat
+       129-            015000 -0.00132839927886896  $ Phosphorus-nat
+       130-            016000 -0.00198760493605206  $ Sulfur-nat
+       131-            017000 -0.00133838724337174  $ Chlorine-nat
+       132-            018000 -1.54379322915886e-05 $ Argon-nat
+       133-            019000 -0.00198760493605206  $ Potassium-nat
+       134-            020000 -0.000229723183563806 $ Calcium-nat
+       135-            026000 -4.99398225138708e-05 $ Iron-nat
+       136-            030000 -2.99638935083225e-05 $ Zinc-nat
+       137-       c
+       138-       c  Truck Interior, Metals
+       139-       c  Steel, Stainless 202
+       140-       c  and Dry Air
+       141-       c     Mass Density (g/cm3): = 0.3387145
+       142-       M9   006000 -0.000747868606137262 $ C-nat
+  warning.  material        9 is not used in the problem.
+       143-            007000 -0.00381726731245058  $ N-nat
+       144-            008000 -0.000789163899200162 $ O-nat
+       145-            014000 -0.00498297608735832  $ Si-nat
+       146-            015000 -0.000298978565241499 $ P-nat
+       147-            016000 -0.00014948928262075  $ S-nat
+       148-            018000 -4.36731454909612e-05 $ Ar-nat
+       149-            024000 -0.1793871391449      $ Cr-nat
+       150-            025000 -0.0872020815287706   $ Mn-nat
+       151-            026000 -0.672751601554247    $ Fe-nat
+       152-            028000 -0.0498297608735832   $ Ni-nat
+       153-       c
+       154-       c cccccccccccccccccccccccccccccc
+       155-       c  CROSS-SECTION CARD BLOCK    c
+       156-       c cccccccccccccccccccccccccccccc
+       157-       c
+       158-       c cccccccccccccccccccccccccccccc
+       159-       c  SOURCE CARD BLOCK           c
+       160-       c cccccccccccccccccccccccccccccc
+       161-       c
+       162-       SDEF POS 0 -1500 272.699 ERG=0.55 PAR=2
+       163-       c
+       164-       c cccccccccccccccccccccccccccccc
+       165-       c  TALLY CARD BLOCK            c
+       166-       c cccccccccccccccccccccccccccccc
+       167-       c
+       168-       c Left PVT
+       169-       c Surface Current
+       170-       F111:P 53.1
+       171-       E111  0 199i 2
+       172-       *F121:P 53.1
+       173-       E121  0 199i 2
+       174-       c Surface Fluence
+       175-       F112:P 53.1
+       176-       E112  0 199i 2
+       177-       *F122:P 53.1
+       178-       E122  0 199i 2
+       179-       c Cell Fluence
+       180-       F114:P 53
+       181-       E114  0 199i 2
+       182-       *F124:P 53
+       183-       E124  0 199i 2
+       184-       c Cell Pulse
+       185-       F118:P 53
+       186-       E118  0 199i 2
+       187-       *F128:P 53
+       188-       E128  0 199i 2
+       189-       c
+       190-       c
+       191-       c Right PVT
+       192-       c Surface Current
+       193-       F211:P 63.2
+       194-       E211  0 199i 2
+       195-       *F221:P 63.2
+       196-       E221  0 199i 2
+       197-       c Surface Fluence
+       198-       F212:P 63.2
+       199-       E212  0 199i 2
+       200-       *F222:P 63.2
+       201-       E222  0 199i 2
+       202-       c Cell Fluence
+       203-       F214:P 63
+       204-       E214  0 199i 2
+       205-       *F224:P 63
+       206-       E224  0 199i 2
+       207-       c Cell Pulse
+       208-       F218:P 63
+       209-       E218  0 199i 2
+       210-       *F228:P 63
+       211-       E228  0 199i 2
+       212-       c
+       213-       c cccccccccccccccccccccccccccccc
+       214-       c  MODE AND NPS BLOCK          c
+       215-       c cccccccccccccccccccccccccccccc
+       216-       c
+       217-       MODE P
+       218-       NPS 2500000000
+       219-       c
+       220-       c cccccccccccccccccccccccccccccc
+       221-       c  OTHER DATA CARDS BLOCK      c
+       222-       c cccccccccccccccccccccccccccccc
+       223-       c
+       224-       c  END OF DATA CARDS LEAVE FOLLOWING LINE BLANK AS DELIMINATER
+
+ ***************************************************
+ * Random Number Generator  =                    1 *
+ * Random Number Seed       =       19073486328125 *
+ * Random Number Multiplier =       19073486328125 *
+ * Random Number Adder      =                    0 *
+ * Random Number Bits Used  =                   48 *
+ * Random Number Stride     =               152917 *
+ ***************************************************
+
+
+ surface        1.1 and surface       11.1 are the same.       11.1 will be deleted.
+
+ surface        1.1 and surface       21.1 are the same.       21.1 will be deleted.
+
+ surface        1.1 and surface       31.1 are the same.       31.1 will be deleted.
+
+ surface        1.2 and surface       11.2 are the same.       11.2 will be deleted.
+
+ surface        1.2 and surface       21.2 are the same.       21.2 will be deleted.
+
+ surface        1.2 and surface       31.2 are the same.       31.2 will be deleted.
+
+ surface        1.3 and surface       11.3 are the same.       11.3 will be deleted.
+
+ surface        1.3 and surface       21.3 are the same.       21.3 will be deleted.
+
+ surface        1.3 and surface       31.3 are the same.       31.3 will be deleted.
+
+ surface        1.4 and surface       11.4 are the same.       11.4 will be deleted.
+
+ surface        1.4 and surface       21.4 are the same.       21.4 will be deleted.
+
+ surface        1.4 and surface       31.4 are the same.       31.4 will be deleted.
+
+ surface        1.5 and surface       31.5 are the same.       31.5 will be deleted.
+
+ surface        1.6 and surface       11.6 are the same.       11.6 will be deleted.
+
+ surface       11.5 and surface       21.6 are the same.       21.6 will be deleted.
+
+ surface       21.5 and surface       31.6 are the same.       31.6 will be deleted.
+
+ surface       51.1 and surface       52.1 are the same.       52.1 will be deleted.
+
+ surface       51.3 and surface       61.3 are the same.       61.3 will be deleted.
+
+ surface       51.4 and surface       61.4 are the same.       61.4 will be deleted.
+
+ surface       51.5 and surface       61.5 are the same.       61.5 will be deleted.
+
+ surface       51.6 and surface       61.6 are the same.       61.6 will be deleted.
+
+ surface       52.2 and surface       53.2 are the same.       53.2 will be deleted.
+
+ surface       52.3 and surface       62.3 are the same.       62.3 will be deleted.
+
+ surface       52.4 and surface       62.4 are the same.       62.4 will be deleted.
+
+ surface       52.5 and surface       62.5 are the same.       62.5 will be deleted.
+
+ surface       52.6 and surface       62.6 are the same.       62.6 will be deleted.
+
+ surface       53.1 and surface       54.1 are the same.       54.1 will be deleted.
+
+ surface       53.3 and surface       63.3 are the same.       63.3 will be deleted.
+
+ surface       53.4 and surface       63.4 are the same.       63.4 will be deleted.
+
+ surface       53.5 and surface       63.5 are the same.       63.5 will be deleted.
+
+ surface       53.6 and surface       63.6 are the same.       63.6 will be deleted.
+
+ surface       54.3 and surface       64.3 are the same.       64.3 will be deleted.
+
+ surface       54.4 and surface       64.4 are the same.       64.4 will be deleted.
+
+ surface       54.5 and surface       64.5 are the same.       64.5 will be deleted.
+
+ surface       54.6 and surface       64.6 are the same.       64.6 will be deleted.
+
+ surface       61.2 and surface       62.2 are the same.       62.2 will be deleted.
+
+ surface       62.1 and surface       63.1 are the same.       63.1 will be deleted.
+
+ surface       63.2 and surface       64.2 are the same.       64.2 will be deleted.
+ 
+  comment.          38 surfaces were deleted for being the same as others.
+ 
+  warning.     1 energy bins of tally      111 are below energy cutoff.
+ 
+  warning.     1 energy bins of tally      112 are below energy cutoff.
+ 
+  warning.     1 energy bins of tally      114 are below energy cutoff.
+ 
+  warning.     1 energy bins of tally      121 are below energy cutoff.
+ 
+  warning.     1 energy bins of tally      122 are below energy cutoff.
+ 
+  warning.     1 energy bins of tally      124 are below energy cutoff.
+ 
+  warning.     1 energy bins of tally      211 are below energy cutoff.
+ 
+  warning.     1 energy bins of tally      212 are below energy cutoff.
+ 
+  warning.     1 energy bins of tally      214 are below energy cutoff.
+ 
+  warning.     1 energy bins of tally      221 are below energy cutoff.
+ 
+  warning.     1 energy bins of tally      222 are below energy cutoff.
+ 
+  warning.     1 energy bins of tally      224 are below energy cutoff.
+1cells                                                                                                  print table 60
+
+                               atom        gram                                            neutron    photon                           
+              cell      mat   density     density     volume       mass            pieces importance importance                        
+
+        1        1        0  0.00000E+00 0.00000E+00 0.00000E+00 0.00000E+00           0  0.0000E+00 0.0000E+00                        
+        2       10        4  6.83110E-02 1.52000E+00 7.50000E+07 1.14000E+08           0  1.0000E+00 1.0000E+00                        
+        3       20        3  3.29614E-02 1.03200E+00 7.50000E+07 7.74000E+07           0  2.0000E+00 2.0000E+00                        
+        4       30        1  4.98817E-05 1.20500E-03 4.43609E+09 5.34549E+06           0  2.0000E+00 2.0000E+00                        
+        5       40        7  6.02371E-02 2.69890E+00 8.74610E+05 2.36049E+06           0  2.0000E+00 2.0000E+00                        
+        6       45        8  4.95261E-02 5.00602E-01 6.14777E+07 3.07759E+07           0  2.0000E+00 2.0000E+00                        
+        7       50        5  8.58629E-02 7.82000E+00 1.38943E+05 1.08653E+06           0  2.0000E+00 2.0000E+00                        
+        8       51        1  4.98817E-05 1.20500E-03 4.10120E+05 4.94194E+02           0  2.0000E+00 2.0000E+00                        
+        9       52        6  3.29849E-02 1.13500E+01 1.89128E+04 2.14660E+05           0  2.0000E+00 2.0000E+00                        
+       10       53        2  2.17481E-01 2.25000E+00 2.08666E+05 4.69498E+05           0  2.0000E+00 2.0000E+00                        
+       11       60        5  8.58629E-02 7.82000E+00 1.38943E+05 1.08653E+06           0  2.0000E+00 2.0000E+00                        
+       12       61        1  4.98817E-05 1.20500E-03 4.10120E+05 4.94194E+02           0  2.0000E+00 2.0000E+00                        
+       13       62        6  3.29849E-02 1.13500E+01 1.89128E+04 2.14660E+05           0  2.0000E+00 2.0000E+00                        
+       14       63        2  2.17481E-01 2.25000E+00 2.08666E+05 4.69498E+05           0  2.0000E+00 2.0000E+00                        
+
+ total                                               4.65000E+09 2.33424E+08
+
+    minimum source weight = 1.0000E+00    maximum source weight = 1.0000E+00
+ 
+  warning.  Force analog capture for pulse-height tally variance reduction
+  comment.  Using pulse-height tally variance reduction.
+
+        14 warning messages so far.
+1cross-section tables                                                                                   print table 100
+     XSDIR used: /home/dbo/MY_MCNP/MCNP_DATA/xsdir_mcnp6.2
+
+     table    length
+
+                        tables from file xdata/mcplib84                                                  
+
+   1000.84p    1974  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+   6000.84p    3228  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+   7000.84p    3270  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+   8000.84p    3348  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  11000.84p    4071  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  12000.84p    3857  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  13000.84p    4922  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  14000.84p    4868  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  15000.84p    4574  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  16000.84p    4730  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  17000.84p    4814  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  18000.84p    4772  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  19000.84p    5123  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  20000.84p    5089  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  26000.84p    5794  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  30000.84p    6364  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+  82000.84p   10086  Update of MCPLIB04 Photon Compton Broadening Data For MCNP5 see LA-UR-    12-00018        01/03/12
+                     Energy range:   1.00000E-03  to  1.00000E+05 MeV.
+
+  total       80884
+
+ maximum photon energy set to    100.0 mev (maximum electron energy)
+
+                        tables from file xdata/el03                                                      
+
+   1000.03e    2329                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+   6000.03e    2333                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+   7000.03e    2333                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+   8000.03e    2333                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  11000.03e    2337                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  12000.03e    2337                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  13000.03e    2337                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  14000.03e    2339                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  15000.03e    2339                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  16000.03e    2339                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  17000.03e    2339                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  18000.03e    2341                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  19000.03e    2343                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  20000.03e    2343                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  26000.03e    2345                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  30000.03e    2347                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+  82000.03e    2373                                                                                          6/6/98    
+                     Energy range:   1.00000E-03  to  1.00000E+03 MeV.
+
+1particles and energy limits                                                                            print table 101
+
+                         particle      maximum       smallest      largest       always        always
+                         cutoff        particle      table         table         use table     use model
+   particle type         energy        energy        maximum       maximum       below         above
+
+    2  p    photon      1.0000E-03    1.0000E+02    1.0000E+05    1.0000E+05    1.0000E+36    1.0000E+36
+    3  e    electron    1.0000E-03    1.0000E+02    1.0000E+02    1.0000E+02    1.0000E+36    1.0000E+36
+ 
+ 
+  warning.  material        5 has been set to a conductor.
+ 
+  warning.  material        6 has been set to a conductor.
+ 
+  warning.  material        7 has been set to a conductor.
+
+ ***********************************************************************************************************************
+
+ dump no.    1 on file run_f_m1500_0dot55     nps =           0     coll =              0     ctm =        0.00   nrn = 
+                0
+
+        17 warning messages so far.
+ master starting     191 MPI slave tasks with       1 threads each  10/06/23 12:45:33 
+ master set rendezvous nps =   250000000,  work chunks =   191    10/06/23 12:45:33 
+ master set rendezvous nps =   500000000,  work chunks =   191    10/06/23 12:47:05 

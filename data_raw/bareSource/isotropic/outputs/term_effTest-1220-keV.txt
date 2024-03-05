@@ -1,0 +1,50 @@
+ mcnp     ver=6.mpi, ld=07/01/21  11/11/23 02:33:48                   
+          Code Name & Version = MCNP_6.20, 6.2.0
+          Copyright LANS/LANL/DOE - see output file
+  
+     _/      _/        _/_/_/       _/      _/       _/_/_/         _/_/_/ 
+    _/_/  _/_/      _/             _/_/    _/       _/    _/     _/        
+   _/  _/  _/      _/             _/  _/  _/       _/_/_/       _/_/_/     
+  _/      _/      _/             _/    _/_/       _/           _/    _/    
+ _/      _/        _/_/_/       _/      _/       _/             _/_/       
+  
+  comment.  Physics models disabled.
+ comment. using random number generator  1, initial seed = 19073486328125      
+ 
+  warning.     1 energy bins of tally       11 are below energy cutoff.
+  warning.  Force analog capture for pulse height tallies
+ imcn   is done
+
+
+ ctm =        0.00   nrn =                 0
+ dump    1 on file run_effTest-1220-keV   nps =           0   coll =                0
+ xact   is done
+
+ cp0 =   0.01
+ master starting     191 MPI slave tasks with       1 threads each  11/11/23 02:33:48 
+ master broadcasting static commons...
+ master broadcasting dynamic commons...
+ master broadcasting cross section data...
+ master completed initialization broadcasts.
+ master set rendezvous nps =   500000000,  work chunks =   191    11/11/23 02:33:49 
+ master set rendezvous nps =  1000000000,  work chunks =   191    11/11/23 02:34:03 
+ master set rendezvous nps =  1500000000,  work chunks =   191    11/11/23 02:34:17 
+ master set rendezvous nps =  2000000000,  work chunks =   191    11/11/23 02:34:32 
+ master set rendezvous nps =  2500000000,  work chunks =   191    11/11/23 02:34:46 
+ master set rendezvous nps =  3000000000,  work chunks =   191    11/11/23 02:35:01 
+ master set rendezvous nps =  3500000000,  work chunks =   191    11/11/23 02:35:15 
+ master set rendezvous nps =  4000000000,  work chunks =   191    11/11/23 02:35:29 
+ master set rendezvous nps =  4500000000,  work chunks =   191    11/11/23 02:35:44 
+ master set rendezvous nps =  5000000000,  work chunks =   191    11/11/23 02:35:58 
+      run terminated when  5000000000  particle histories were done.
+
+ =====>  124828.00 M histories/hr    (based on wall-clock time in mcrun)
+
+
+  warning.  random number period exceeded.  decrease stride.
+  warning.     2 of   2 tallies had bins with large relative errors.
+
+ ctm =      448.67   nrn =       29228295773
+ dump    2 on file run_effTest-1220-keV   nps =  5000000000   coll =        759223945
+ mcrun  is done
+
