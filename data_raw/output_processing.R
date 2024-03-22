@@ -1,6 +1,0 @@
-source("R/package_load.R")
-source("R/filenameAndParameters.R")
-source("R/cleanText.R")
-source("R/mcnpOutputParsing.R")
-package_load("tidyverse", "pracma")
-library(dplyr)
