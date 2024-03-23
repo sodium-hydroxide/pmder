@@ -663,6 +663,265 @@ mcnp_input_creation(
 
 ```{r}
 
+
+deck_list <- "listOfInputs.txt"
+directory <- "data_raw/truckPtSource/"
+
+
+# ----
+
+mcnp_output_processing <- function(
+        deck_list,
+        directory) {
+    
+    output_list <- paste(
+        "out_",
+        readLines(paste(directory,deck_list, sep = "")),
+        sep = ""
+    )
+
+    raw_data <- btools::mcnparse(
+        output_list, directory = directory
+    )
+
+
+
+    # Data Cleaning ----
+    stat_checks <- raw_data$check
+    raw_data <- dplyr::mutate(
+        raw_data$data,
+        Ed_keV = bin_mev * 1000, bin_mev = NULL,
+        Es_keV = 0,
+        y_cm = 0,
+        contents = ""
+    )
+
+    out = list(stat_check = stat_checks)
+
+    for (i in 1:nrow(raw_data)) {
+        run_id_i <- strsplit(raw_data$run_id[i], split = "_")[[1]]
+
+        raw_data$contents[i] <- run_id_i[2]
+        raw_data$y_cm[i] <- as.numeric(gsub("m", "-", run_id_i[3]))
+        raw_data$Es_keV[i] <- 1000 * as.numeric(gsub("dot", ".", run_id_i[4]))
+
+    }
+    rm(i, run_id_i)
+
+    for (tally in unique(raw_data$tally)) {
+        label <- strsplit(tally, split = "")[[1]]
+
+        if (label[1] == "1") {
+            label[1] <- "L"
+        }
+        else {
+            label[1] <- "R"
+        }
+
+        if (label[2] == "1") {
+            label[2] <- "F"
+        }
+        else {
+            label[2] <- "sF"
+        }
+
+        raw_data[raw_data$tally == tally,]$tally <- paste(label, collapse = "")
+
+    }
+    rm(tally, label)
+
+    out$raw_data <- raw_data
+
+    spectral_data <-
+        raw_data |>
+        dplyr::select(-run_id) |>
+        dplyr::mutate(
+            tally = as.factor(tally),
+            contents = as.factor(contents)
+        ) |>
+        dplyr::filter(
+            Ed_keV <= Es_keV + 10
+        ) |>
+        tidyr::pivot_wider(
+            values_from = c(value, re),
+            names_from = tally
+        ) |>
+        dplyr::mutate(
+            F1 = 0.5 * (value_LF1 + value_RF1),
+            uF1 = 0.5 * sqrt(
+                ((re_LF1 * value_LF1) ^ 2) + ((re_RF1 * value_RF1) ^ 2)
+            ),
+            F2 = 0.5 * (value_LF2 + value_RF2),
+            uF2 = 0.5 * sqrt(
+                ((re_LF2 * value_LF2) ^ 2) + ((re_RF2 * value_RF2) ^ 2)
+            ),
+            F4 = 0.5 * (value_LF4 + value_RF4),
+            uF4 = 0.5 * sqrt(
+                ((re_LF4 * value_LF4) ^ 2) + ((re_RF4 * value_RF4) ^ 2)
+            ),
+            F8 = 0.5 * (value_LF8 + value_RF8),
+            uF8 = 0.5 * sqrt(
+                ((re_LF8 * value_LF8) ^ 2) + ((re_RF8 * value_RF8) ^ 2)
+            ),
+            PrReach = F1,
+            uPrReach = uF1,
+            PrDet = F8,
+            uPrDet = uF8
+        ) |>
+        as.data.frame()
+
+    out$spectral_data <- spectral_data
+
+    # Creation of summary data ----
+
+    all_Es_keV <- unique(spectral_data$Es_keV)
+    num_Es_keV <- length(all_Es_keV)
+    all_y_cm <- unique(spectral_data$y_cm)
+    num_y_cm <- length(all_y_cm)
+    all_contents <- unique(spectral_data$contents)
+    num_contents <- length(all_contents)
+
+    summary_data <- dplyr::mutate(
+        data.frame(
+            contents = rep(all_contents, each = num_y_cm * num_Es_keV),
+            Es_keV =
+                rep(rep(all_Es_keV, times = num_y_cm), times = num_contents),
+            y_cm = rep(rep(all_y_cm, each = num_Es_keV), times = num_contents)
+        ),
+        PrReach = 0,
+        uPrReach = 0,
+        PrDet = 0,
+        uPrDet = 0
+    )
+
+    rm(all_Es_keV, num_Es_keV, all_y_cm, num_y_cm, all_contents, num_contents)
+
+    for (i in 1:nrow(summary_data)) {
+        subset_i <- dplyr::filter(
+            spectral_data,
+            contents == summary_data$contents[i] &
+                Es_keV == summary_data$Es_keV[i] &
+                y_cm == summary_data$y_cm[i]
+        )
+
+        summary_data$PrReach[i] <- sum(subset_i$PrReach)
+        summary_data$uPrReach[i] <- btools::rss(subset_i$uPrReach)
+
+        summary_data$PrDet[i] <- sum(subset_i$PrDet)
+        summary_data$uPrDet[i] <- btools::rss(subset_i$uPrDet)
+        
+    }
+    rm(i, subset_i)
+    
+    out$summary_data <- summary_daty
+
+    # Creation of linear model ----
+
+    linear_model <- summary_data |>
+        dplyr::mutate(
+            cm = sqrt(y_cm^2 + 179.5 ^ 2),
+            kev = Es_keV,
+            y_cm = NULL,
+            Es_keV = NULL,
+            PrReach = NULL,
+            uPrReach = NULL,
+            actual = PrDet,
+            PrDet = NULL,
+            se_actual = uPrDet,
+            uPrDet = NULL,
+            trans_cm = log(cm),
+            trans_kev = log(kev),
+            trans_actual = log(actual),
+            trans_se_actual = se_actual / actual,
+            weight_trans = trans_se_actual ^ -2) |>
+        lm(
+            trans_actual ~ trans_cm + trans_kev + contents,
+            data = _,
+            weights = weight_trans)
+
+    lm_val <- linear_model$coefficients[c(1,4,2,3)]
+    lm_cov <- vcov(linear_model)[c(1,4,2,3),c(1,4,2,3)]
+    lm_se <- sqrt(diag(lm_cov))
+    lm_cor <- lm_cov / lm_se %*% t(lm_se)
+
+    lm_df <- data.frame(cbind(
+        lm_val, lm_se, lm_cor
+    )) |>
+        dplyr::mutate(type = c(
+            "$\\hat{\\beta}_0$",
+            "$\\hat{\\beta}_1$",
+            "$\\hat{\\beta}_2$",
+            "$\\hat{\\beta}_3$"
+        )) |> relocate(type)
+
+    linear_model_beta <- list(
+        val = lm_val,
+        se = lm_se,
+        cov = lm_cov,
+        cor = lm_cor,
+        dataframe = lm_df
+    )
+    
+    out$linear_regression <- list(
+        linear_model = linear_model,
+        linear_model_beta = linear_model_beta,
+        linear_model_aug = broom::augment(linear_model)
+    )
+    
+
+    # Creation of earth model ----
+
+    earth_model_aug <- dplyr::mutate(
+        summary_data,
+        PrReach = NULL,
+        uPrReach = NULL,
+        trans_actual = log(PrDet),
+        se_trans = uPrDet / PrDet,
+        weight_trans_actual = se_trans ^ -2,
+        PrDet = NULL,
+        uPrDet = NULL)
+
+    earth_model <- earth::earth(
+        formula = (
+            trans_actual
+            ~ log(sqrt(as.numeric(y_cm)^2 + 179.5^2))
+            + Es_keV + contents
+            + Es_keV:contents
+            + Es_keV:y_cm
+            + log(sqrt(as.numeric(y_cm)^2 + 179.5^2)):contents),
+        data = earth_model_aug,
+        weights = weight_trans_actual,
+        varmod.method = "earth",
+        nfold = 2,
+        ncross = 30)
+
+    earth_model_aug <- dplyr::mutate(
+        earth_model_aug,
+        .fitted = earth_model$fitted.values,
+        .resid = earth_model$residuals,
+        .se.fitted = pull(
+                    dplyr::mutate(
+                        predict(earth_model,
+                                interval = "cint",
+                                level = 2 * pnorm(1) - 1),
+                        se = 0.5 * (upr - lwr)),
+                    se),
+        .std.resid = .resid / sqrt(.se.fitted ^ 2 + se_trans ^ 2)
+    )
+    
+    out$earth_regression <- list(
+        earth_model = earth_model,
+        earth_model_aug = earth_model_aug
+    )
+
+    # Return everything
+    return(out)
+
+}
+
+
+
+#star F2
 ```
 
 
@@ -672,50 +931,7 @@ mcnp_input_creation(
 
 ```{r}
 # Construction of linear model ----
-linear_model <- summary_data |>
-    dplyr::mutate(
-        cm = sqrt(y_cm^2 + 179.5 ^ 2),
-        kev = Es_keV,
-        y_cm = NULL,
-        Es_keV = NULL,
-        PrReach = NULL,
-        uPrReach = NULL,
-        actual = PrDet,
-        PrDet = NULL,
-        se_actual = uPrDet,
-        uPrDet = NULL,
-        trans_cm = log(cm),
-        trans_kev = log(kev),
-        trans_actual = log(actual),
-        trans_se_actual = se_actual / actual,
-        weight_trans = trans_se_actual ^ -2) |>
-    lm(
-        trans_actual ~ trans_cm + trans_kev + contents,
-        data = _,
-        weights = weight_trans)
 
-lm_val <- linear_model$coefficients[c(1,4,2,3)]
-lm_cov <- vcov(linear_model)[c(1,4,2,3),c(1,4,2,3)]
-lm_se <- sqrt(diag(lm_cov))
-lm_cor <- lm_cov / lm_se %*% t(lm_se)
-
-lm_df <- data.frame(cbind(
-    lm_val, lm_se, lm_cor
-)) |>
-    dplyr::mutate(type = c(
-        "$\\hat{\\beta}_0$",
-        "$\\hat{\\beta}_1$",
-        "$\\hat{\\beta}_2$",
-        "$\\hat{\\beta}_3$"
-    )) |> relocate(type)
-
-linear_model_beta <- list(
-    val = lm_val,
-    se = lm_se,
-    cov = lm_cov,
-    cor = lm_cor,
-    dataframe = lm_df
-)
 
 # Save data ----
 save(linear_model,file = "data/linear_model.rda")
@@ -728,43 +944,6 @@ save(count_rate_data_continuous, file = "data/count_rate_data_continuous.R")
 
 
 ```{r}
-earth_model_aug <- dplyr::mutate(
-    summary_data,
-    PrReach = NULL,
-    uPrReach = NULL,
-    trans_actual = log(PrDet),
-    se_trans = uPrDet / PrDet,
-    weight_trans_actual = se_trans ^ -2,
-    PrDet = NULL,
-    uPrDet = NULL)
-
-earth_model <- earth::earth(
-    formula = (
-        trans_actual
-        ~ log(sqrt(as.numeric(y_cm)^2 + 179.5^2))
-        + Es_keV + contents
-        + Es_keV:contents
-        + Es_keV:y_cm
-        + log(sqrt(as.numeric(y_cm)^2 + 179.5^2)):contents),
-    data = earth_model_aug,
-    weights = weight_trans_actual,
-    varmod.method = "earth",
-    nfold = 2,
-    ncross = 30)
-
-earth_model_aug <- dplyr::mutate(
-    earth_model_aug,
-    .fitted = earth_model$fitted.values,
-    .resid = earth_model$residuals,
-    .se.fitted = pull(
-                dplyr::mutate(
-                    predict(earth_model,
-                            interval = "cint",
-                            level = 2 * pnorm(1) - 1),
-                    se = 0.5 * (upr - lwr)),
-                se),
-    .std.resid = .resid / sqrt(.se.fitted ^ 2 + se_trans ^ 2)
-)
 
 save(earth_model, file = "data/earth_model.Rda")
 save(earth_model_aug, file = "data/earth_model_aug.Rda")
