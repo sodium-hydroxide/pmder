@@ -30,6 +30,7 @@ tbl <- function(tbl_name) {
                 "$2.97 \\times 10^{-1}$"
             )
         )
+
         col_names <- c(
             "Material", "Mass Density ($\\mathrm{g}\\,\\mathrm{cm}^{-3}$)",
             "Atom", "Mass Fraction"
@@ -62,8 +63,53 @@ tbl <- function(tbl_name) {
     }
 
     else if (tbl_name == "materials_truck") {
+        table <- data.frame(
+            material = c(
+                "Aluminium", "Foodstuff", "", "", "", "", "", "", "", "",
+                "", "", "", "", "", "Scrap Metal", "", "", "", "", "", "",
+                "", "", "", ""
+            ),
+            density = c(
+                "$2.699$", "$5.006\\cdot 10^{-1}$", "", "", "", "", "", "",
+                "", "", "", "", "", "", "", "$3.387\\times 10^{-1}$", "",
+                "", "", "", "", "", "", "", "", ""
 
+            ),
+            atom = c(
+                "$\\mathrm{Al}$", "$\\mathrm{H}$", "$\\mathrm{C}$",
+                "$\\mathrm{N}$", "$\\mathrm{O}$", "$\\mathrm{Na}$",
+                "$\\mathrm{Mg}$", "$\\mathrm{P}$", "$\\mathrm{S}$",
+                "$\\mathrm{Cl}$", "$\\mathrm{Ar}$", "$\\mathrm{K}$",
+                "$\\mathrm{Ca}$", "$\\mathrm{Fe}$", "$\\mathrm{Zn}$",
+                "$\\mathrm{C}$", "$\\mathrm{N}$", "$\\mathrm{O}$",
+                "$\\mathrm{Si}$", "$\\mathrm{P}$", "$\\mathrm{S}$",
+                "$\\mathrm{Ar}$", "$\\mathrm{Cr}$", "$\\mathrm{Mn}$",
+                "$\\mathrm{Fe}$", "$\\mathrm{Ni}$"
+            ),
+            mass_fraction = c(
+                "$1.00$", "$1.04 \\times 10^{-1}$",
+                "$2.31 \\times 10^{-1}$", "$2.57 \\times 10^{-2}$",
+                "$6.30 \\times 10^{-1}$", "$1.13 \\times 10^{-3}$",
+                "$1.30 \\times 10^{-4}$", "$1.33 \\times 10^{-3}$",
+                "$1.99 \\times 10^{-3}$", "$1.34 \\times 10^{-3}$",
+                "$1.54 \\times 10^{-5}$", "$1.99 \\times 10^{-3}$",
+                "$2.30 \\times 10^{-4}$", "$4.99 \\times 10^{-5}$",
+                "$3.00 \\times 10^{-5}$", "$7.48 \\times 10^{-4}$",
+                "$3.82 \\times 10^{-2}$", "$7.89 \\times 10^{-4}$",
+                "$4.98 \\times 10^{-3}$", "$2.99 \\times 10^{-3}$",
+                "$1.49 \\times 10^{-4}$", "$4.67 \\times 10^{-5}$",
+                "$1.79 \\times 10^{-1}$", "$8.72 \\times 10^{-2}$",
+                "$6.73 \\times 10^{-1}$", "$4.98 \\times 10^{-2}$"
+            )
+        )
+
+        col_names <- c(
+            "Material", "Mass Density ($\\mathrm{g}\\,\\mathrm{cm}^{-3}$)",
+            "Atom", "Mass Fraction"
+        )
     }
+
+    else
 
     else {
         stop(paste(
