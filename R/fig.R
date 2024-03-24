@@ -9,6 +9,10 @@
 #' @examples fig("") will return a list of potential figures
 fig <- function(fig_name, color_style = "plasma") {
 
+    if (fig_name == "pvt_atten_coeff") {
+        stop()
+    }
+
     if (fig_name == "interior_atten_coeff") {
         plt <-
             data.frame(
@@ -137,6 +141,10 @@ fig <- function(fig_name, color_style = "plasma") {
                     fill = "white"
                 )
             )
+    }
+
+    if (fig_name == "histories_needed") {
+        stop()
     }
 
     else if (fig_name == "star_differences") {
@@ -658,7 +666,9 @@ fig <- function(fig_name, color_style = "plasma") {
     else {
         stop(paste(
             "Potential figures are:",
+            "pvt_atten_coeff",
             "interior_atten_coeff",
+            "histories_needed",
             "star_differences",
             "parity_differences",
             "prob_reach",
