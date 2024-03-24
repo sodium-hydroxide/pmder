@@ -1,1192 +1,678 @@
-#
-#
-# pmder_figs <- function() {
-#
-#     # Interior attenuation coefficients----
-#     materials <- rbind(
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 3.00000e-03, 4.00000e-03,
-#                 5.00000e-03, 6.00000e-03, 8.00000e-03, 1.00000e-02, 1.50000e-02,
-#                 2.00000e-02, 3.00000e-02, 4.00000e-02, 5.00000e-02, 6.00000e-02,
-#                 8.00000e-02, 1.00000e-01, 1.50000e-01, 2.00000e-01, 3.00000e-01,
-#                 4.00000e-01, 5.00000e-01, 6.00000e-01, 8.00000e-01, 1.00000e+00,
-#                 1.25000e+00, 1.50000e+00, 2.00000e+00, 3.00000e+00, 4.00000e+00,
-#                 5.00000e+00, 6.00000e+00, 8.00000e+00, 1.00000e+01, 1.50000e+01,
-#                 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 7.217e+00, 2.148e+00, 1.059e+00, 5.612e-01, 4.546e-01, 4.193e-01,
-#                 4.042e-01, 3.914e-01, 3.854e-01, 3.764e-01, 3.695e-01, 3.570e-01,
-#                 3.458e-01, 3.355e-01, 3.260e-01, 3.091e-01, 2.944e-01, 2.651e-01,
-#                 2.429e-01, 2.112e-01, 1.893e-01, 1.729e-01, 1.599e-01, 1.405e-01,
-#                 1.263e-01, 1.129e-01, 1.027e-01, 8.769e-02, 6.921e-02, 5.806e-02,
-#                 5.049e-02, 4.498e-02, 3.746e-02, 3.254e-02, 2.539e-02, 2.153e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Hydrogen",
-#                 mass_fraction_foods = 0.104346262753382,
-#                 mass_fraction_metal = 0
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 3.00000e-03, 4.00000e-03,
-#                 5.00000e-03, 6.00000e-03, 8.00000e-03, 1.00000e-02, 1.50000e-02,
-#                 2.00000e-02, 3.00000e-02, 4.00000e-02, 5.00000e-02, 6.00000e-02,
-#                 8.00000e-02, 1.00000e-01, 1.50000e-01, 2.00000e-01, 3.00000e-01,
-#                 4.00000e-01, 5.00000e-01, 6.00000e-01, 8.00000e-01, 1.00000e+00,
-#                 1.25000e+00, 1.50000e+00, 2.00000e+00, 3.00000e+00, 4.00000e+00,
-#                 5.00000e+00, 6.00000e+00, 8.00000e+00, 1.00000e+01, 1.50000e+01,
-#                 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 2.211e+03, 7.002e+02, 3.026e+02, 9.033e+01, 3.778e+01, 1.912e+01,
-#                 1.095e+01, 4.576e+00, 2.373e+00, 8.071e-01, 4.420e-01, 2.562e-01,
-#                 2.076e-01, 1.871e-01, 1.753e-01, 1.610e-01, 1.514e-01, 1.347e-01,
-#                 1.229e-01, 1.066e-01, 9.546e-02, 8.715e-02, 8.058e-02, 7.076e-02,
-#                 6.361e-02, 5.690e-02, 5.179e-02, 4.442e-02, 3.562e-02, 3.047e-02,
-#                 2.708e-02, 2.469e-02, 2.154e-02, 1.959e-02, 1.698e-02, 1.575e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Carbon",
-#                 mass_fraction_foods = 0.231910697030079,
-#                 mass_fraction_metal = 0.000747868606137262
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 3.00000e-03, 4.00000e-03,
-#                 5.00000e-03, 6.00000e-03, 8.00000e-03, 1.00000e-02, 1.50000e-02,
-#                 2.00000e-02, 3.00000e-02, 4.00000e-02, 5.00000e-02, 6.00000e-02,
-#                 8.00000e-02, 1.00000e-01, 1.50000e-01, 2.00000e-01, 3.00000e-01,
-#                 4.00000e-01, 5.00000e-01, 6.00000e-01, 8.00000e-01, 1.00000e+00,
-#                 1.25000e+00, 1.50000e+00, 2.00000e+00, 3.00000e+00, 4.00000e+00,
-#                 5.00000e+00, 6.00000e+00, 8.00000e+00, 1.00000e+01, 1.50000e+01,
-#                 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 3.311e+03, 1.083e+03, 4.769e+02, 1.456e+02, 6.166e+01, 3.144e+01,
-#                 1.809e+01, 7.562e+00, 3.879e+00, 1.236e+00, 6.178e-01, 3.066e-01,
-#                 2.288e-01, 1.980e-01, 1.817e-01, 1.639e-01, 1.529e-01, 1.353e-01,
-#                 1.233e-01, 1.068e-01, 9.557e-02, 8.719e-02, 8.063e-02, 7.081e-02,
-#                 6.364e-02, 5.693e-02, 5.180e-02, 4.450e-02, 3.579e-02, 3.073e-02,
-#                 2.742e-02, 2.511e-02, 2.209e-02, 2.024e-02, 1.782e-02, 1.673e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Nitrogen",
-#                 mass_fraction_foods = 0.0257590582747789,
-#                 mass_fraction_metal = 0.00381726731245058
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 3.00000e-03, 4.00000e-03,
-#                 5.00000e-03, 6.00000e-03, 8.00000e-03, 1.00000e-02, 1.50000e-02,
-#                 2.00000e-02, 3.00000e-02, 4.00000e-02, 5.00000e-02, 6.00000e-02,
-#                 8.00000e-02, 1.00000e-01, 1.50000e-01, 2.00000e-01, 3.00000e-01,
-#                 4.00000e-01, 5.00000e-01, 6.00000e-01, 8.00000e-01, 1.00000e+00,
-#                 1.25000e+00, 1.50000e+00, 2.00000e+00, 3.00000e+00, 4.00000e+00,
-#                 5.00000e+00, 6.00000e+00, 8.00000e+00, 1.00000e+01, 1.50000e+01,
-#                 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 4.590e+03, 1.549e+03, 6.949e+02, 2.171e+02, 9.315e+01, 4.790e+01,
-#                 2.770e+01, 1.163e+01, 5.952e+00, 1.836e+00, 8.651e-01, 3.779e-01,
-#                 2.585e-01, 2.132e-01, 1.907e-01, 1.678e-01, 1.551e-01, 1.361e-01,
-#                 1.237e-01, 1.070e-01, 9.566e-02, 8.729e-02, 8.070e-02, 7.087e-02,
-#                 6.372e-02, 5.697e-02, 5.185e-02, 4.459e-02, 3.597e-02, 3.100e-02,
-#                 2.777e-02, 2.552e-02, 2.263e-02, 2.089e-02, 1.866e-02, 1.770e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Oxygen",
-#                 mass_fraction_foods = 0.629758437188188,
-#                 mass_fraction_metal = 0.000789163899200162
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.03542e-03, 1.07210e-03, 1.07210e-03, 1.50000e-03,
-#                 2.00000e-03, 3.00000e-03, 4.00000e-03, 5.00000e-03, 6.00000e-03,
-#                 8.00000e-03, 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02,
-#                 4.00000e-02, 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01,
-#                 1.50000e-01, 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01,
-#                 6.00000e-01, 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00,
-#                 2.00000e+00, 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00,
-#                 8.00000e+00, 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 6.542e+02, 5.960e+02, 5.429e+02, 6.435e+03, 3.194e+03, 1.521e+03,
-#                 5.070e+02, 2.261e+02, 1.194e+02, 7.030e+01, 3.018e+01, 1.557e+01,
-#                 4.694e+00, 2.057e+00, 7.197e-01, 3.969e-01, 2.804e-01, 2.268e-01,
-#                 1.796e-01, 1.585e-01, 1.335e-01, 1.199e-01, 1.029e-01, 9.185e-02,
-#                 8.372e-02, 7.736e-02, 6.788e-02, 6.100e-02, 5.454e-02, 4.968e-02,
-#                 4.282e-02, 3.487e-02, 3.037e-02, 2.753e-02, 2.559e-02, 2.319e-02,
-#                 2.181e-02, 2.023e-02, 1.970e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Sodium",
-#                 mass_fraction_foods = 0.00112863998881348,
-#                 mass_fraction_metal = 0
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.14237e-03, 1.30500e-03, 1.30500e-03, 1.50000e-03,
-#                 2.00000e-03, 3.00000e-03, 4.00000e-03, 5.00000e-03, 6.00000e-03,
-#                 8.00000e-03, 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02,
-#                 4.00000e-02, 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01,
-#                 1.50000e-01, 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01,
-#                 6.00000e-01, 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00,
-#                 2.00000e+00, 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00,
-#                 8.00000e+00, 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 9.225e+02, 6.474e+02, 4.530e+02, 5.444e+03, 4.004e+03, 1.932e+03,
-#                 6.585e+02, 2.974e+02, 1.583e+02, 9.381e+01, 4.061e+01, 2.105e+01,
-#                 6.358e+00, 2.763e+00, 9.306e-01, 4.881e-01, 3.292e-01, 2.570e-01,
-#                 1.951e-01, 1.686e-01, 1.394e-01, 1.245e-01, 1.065e-01, 9.492e-02,
-#                 8.647e-02, 7.988e-02, 7.008e-02, 6.296e-02, 5.629e-02, 5.129e-02,
-#                 4.426e-02, 3.613e-02, 3.159e-02, 2.873e-02, 2.681e-02, 2.445e-02,
-#                 2.313e-02, 2.168e-02, 2.127e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Magnesium",
-#                 mass_fraction_foods = 0.000129843538536064,
-#                 mass_fraction_metal = 0
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 1.83890e-03, 1.83890e-03, 2.00000e-03,
-#                 3.00000e-03, 4.00000e-03, 5.00000e-03, 6.00000e-03, 8.00000e-03,
-#                 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02, 4.00000e-02,
-#                 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01, 1.50000e-01,
-#                 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01, 6.00000e-01,
-#                 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00, 2.00000e+00,
-#                 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00, 8.00000e+00,
-#                 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 1.570e+03, 5.355e+02, 3.092e+02, 3.192e+03, 2.777e+03, 9.784e+02,
-#                 4.529e+02, 2.450e+02, 1.470e+02, 6.468e+01, 3.389e+01, 1.034e+01,
-#                 4.464e+00, 1.436e+00, 7.012e-01, 4.385e-01, 3.207e-01, 2.228e-01,
-#                 1.835e-01, 1.448e-01, 1.275e-01, 1.082e-01, 9.614e-02, 8.748e-02,
-#                 8.077e-02, 7.082e-02, 6.361e-02, 5.688e-02, 5.183e-02, 4.480e-02,
-#                 3.678e-02, 3.240e-02, 2.967e-02, 2.788e-02, 2.574e-02, 2.462e-02,
-#                 2.352e-02, 2.338e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Silicon",
-#                 mass_fraction_foods = 0,
-#                 mass_fraction_metal = 0.00498297608735832
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 2.14550e-03, 2.14550e-03,
-#                 3.00000e-03, 4.00000e-03, 5.00000e-03, 6.00000e-03, 8.00000e-03,
-#                 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02, 4.00000e-02,
-#                 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01, 1.50000e-01,
-#                 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01, 6.00000e-01,
-#                 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00, 2.00000e+00,
-#                 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00, 8.00000e+00,
-#                 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 1.913e+03, 6.547e+02, 3.018e+02, 2.494e+02, 2.473e+03, 1.118e+03,
-#                 5.242e+02, 2.860e+02, 1.726e+02, 7.660e+01, 4.035e+01, 1.239e+01,
-#                 5.352e+00, 1.700e+00, 8.096e-01, 4.916e-01, 3.494e-01, 2.324e-01,
-#                 1.865e-01, 1.432e-01, 1.250e-01, 1.055e-01, 9.359e-02, 8.511e-02,
-#                 7.854e-02, 6.884e-02, 6.182e-02, 5.526e-02, 5.039e-02, 4.358e-02,
-#                 3.590e-02, 3.172e-02, 2.915e-02, 2.747e-02, 2.552e-02, 2.452e-02,
-#                 2.364e-02, 2.363e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Phosphorus",
-#                 mass_fraction_foods = 0.00132839927886896,
-#                 mass_fraction_metal = 0.000298978565241499
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 2.47200e-03, 2.47200e-03,
-#                 3.00000e-03, 4.00000e-03, 5.00000e-03, 6.00000e-03, 8.00000e-03,
-#                 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02, 4.00000e-02,
-#                 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01, 1.50000e-01,
-#                 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01, 6.00000e-01,
-#                 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00, 2.00000e+00,
-#                 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00, 8.00000e+00,
-#                 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 2.429e+03, 8.342e+02, 3.853e+02, 2.168e+02, 2.070e+03, 1.339e+03,
-#                 6.338e+02, 3.487e+02, 2.116e+02, 9.465e+01, 5.012e+01, 1.550e+01,
-#                 6.708e+00, 2.113e+00, 9.872e-01, 5.849e-01, 4.053e-01, 2.585e-01,
-#                 2.020e-01, 1.506e-01, 1.302e-01, 1.091e-01, 9.665e-02, 8.781e-02,
-#                 8.102e-02, 7.098e-02, 6.373e-02, 5.697e-02, 5.193e-02, 4.498e-02,
-#                 3.715e-02, 3.293e-02, 3.036e-02, 2.872e-02, 2.682e-02, 2.589e-02,
-#                 2.517e-02, 2.529e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Sulfur",
-#                 mass_fraction_foods = 0.00198760493605206,
-#                 mass_fraction_metal = 0.00014948928262075
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 2.82240e-03, 2.82240e-03,
-#                 3.00000e-03, 4.00000e-03, 5.00000e-03, 6.00000e-03, 8.00000e-03,
-#                 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02, 4.00000e-02,
-#                 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01, 1.50000e-01,
-#                 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01, 6.00000e-01,
-#                 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00, 2.00000e+00,
-#                 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00, 8.00000e+00,
-#                 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 2.832e+03, 9.771e+02, 4.520e+02, 1.774e+02, 1.637e+03, 1.473e+03,
-#                 7.037e+02, 3.901e+02, 2.384e+02, 1.075e+02, 5.725e+01, 1.784e+01,
-#                 7.739e+00, 2.425e+00, 1.117e+00, 6.483e-01, 4.395e-01, 2.696e-01,
-#                 2.050e-01, 1.480e-01, 1.266e-01, 1.054e-01, 9.311e-02, 8.453e-02,
-#                 7.795e-02, 6.826e-02, 6.128e-02, 5.478e-02, 4.994e-02, 4.328e-02,
-#                 3.585e-02, 3.188e-02, 2.950e-02, 2.798e-02, 2.628e-02, 2.549e-02,
-#                 2.496e-02, 2.520e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Chlorine",
-#                 mass_fraction_foods = 0.00133838724337174,
-#                 mass_fraction_metal = 0
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 3.00000e-03, 3.20290e-03,
-#                 3.20290e-03, 4.00000e-03, 5.00000e-03, 6.00000e-03, 8.00000e-03,
-#                 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02, 4.00000e-02,
-#                 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01, 1.50000e-01,
-#                 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01, 6.00000e-01,
-#                 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00, 2.00000e+00,
-#                 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00, 8.00000e+00,
-#                 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 3.184e+03, 1.105e+03, 5.120e+02, 1.703e+02, 1.424e+02, 1.275e+03,
-#                 7.572e+02, 4.225e+02, 2.593e+02, 1.180e+02, 6.316e+01, 1.983e+01,
-#                 8.629e+00, 2.697e+00, 1.228e+00, 7.012e-01, 4.664e-01, 2.760e-01,
-#                 2.043e-01, 1.427e-01, 1.205e-01, 9.953e-02, 8.776e-02, 7.958e-02,
-#                 7.335e-02, 6.419e-02, 5.762e-02, 5.150e-02, 4.695e-02, 4.074e-02,
-#                 3.384e-02, 3.019e-02, 2.802e-02, 2.667e-02, 2.517e-02, 2.451e-02,
-#                 2.418e-02, 2.453e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Argon",
-#                 mass_fraction_foods = 1.54379322915886e-05,
-#                 mass_fraction_metal = 4.36731454909612e-05
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 3.00000e-03, 3.60740e-03,
-#                 3.60740e-03, 4.00000e-03, 5.00000e-03, 6.00000e-03, 8.00000e-03,
-#                 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02, 4.00000e-02,
-#                 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01, 1.50000e-01,
-#                 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01, 6.00000e-01,
-#                 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00, 2.00000e+00,
-#                 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00, 8.00000e+00,
-#                 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 4.058e+03, 1.418e+03, 6.592e+02, 2.198e+02, 1.327e+02, 1.201e+03,
-#                 9.256e+02, 5.189e+02, 3.205e+02, 1.469e+02, 7.907e+01, 2.503e+01,
-#                 1.093e+01, 3.413e+00, 1.541e+00, 8.679e-01, 5.678e-01, 3.251e-01,
-#                 2.345e-01, 1.582e-01, 1.319e-01, 1.080e-01, 9.495e-02, 8.600e-02,
-#                 7.922e-02, 6.929e-02, 6.216e-02, 5.556e-02, 5.068e-02, 4.399e-02,
-#                 3.666e-02, 3.282e-02, 3.054e-02, 2.915e-02, 2.766e-02, 2.704e-02,
-#                 2.687e-02, 2.737e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Potassium",
-#                 mass_fraction_foods = 0.00198760493605206,
-#                 mass_fraction_metal = 0
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 3.00000e-03, 4.00000e-03,
-#                 4.03810e-03, 4.03810e-03, 5.00000e-03, 6.00000e-03, 8.00000e-03,
-#                 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02, 4.00000e-02,
-#                 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01, 1.50000e-01,
-#                 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01, 6.00000e-01,
-#                 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00, 2.00000e+00,
-#                 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00, 8.00000e+00,
-#                 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 4.867e+03, 1.714e+03, 7.999e+02, 2.676e+02, 1.218e+02, 1.187e+02,
-#                 1.023e+03, 6.026e+02, 3.731e+02, 1.726e+02, 9.341e+01, 2.979e+01,
-#                 1.306e+01, 4.080e+00, 1.830e+00, 1.019e+00, 6.578e-01, 3.656e-01,
-#                 2.571e-01, 1.674e-01, 1.376e-01, 1.116e-01, 9.783e-02, 8.851e-02,
-#                 8.148e-02, 7.122e-02, 6.388e-02, 5.709e-02, 5.207e-02, 4.524e-02,
-#                 3.780e-02, 3.395e-02, 3.170e-02, 3.035e-02, 2.892e-02, 2.839e-02,
-#                 2.838e-02, 2.903e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Calcium",
-#                 mass_fraction_foods = 0.000229723183563806,
-#                 mass_fraction_metal = 0
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 3.00000e-03, 4.00000e-03,
-#                 5.00000e-03, 5.98920e-03, 5.98920e-03, 6.00000e-03, 8.00000e-03,
-#                 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02, 4.00000e-02,
-#                 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01, 1.50000e-01,
-#                 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01, 6.00000e-01,
-#                 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00, 2.00000e+00,
-#                 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00, 8.00000e+00,
-#                 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 7.405e+03, 2.694e+03, 1.277e+03, 4.339e+02, 1.988e+02, 1.080e+02,
-#                 6.574e+01, 5.977e+02, 5.160e+02, 2.513e+02, 1.386e+02, 4.571e+01,
-#                 2.038e+01, 6.434e+00, 2.856e+00, 1.550e+00, 9.639e-01, 4.905e-01,
-#                 3.166e-01, 1.788e-01, 1.378e-01, 1.067e-01, 9.213e-02, 8.281e-02,
-#                 7.598e-02, 6.620e-02, 5.930e-02, 5.295e-02, 4.832e-02, 4.213e-02,
-#                 3.559e-02, 3.235e-02, 3.057e-02, 2.956e-02, 2.869e-02, 2.855e-02,
-#                 2.920e-02, 3.026e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Chromium",
-#                 mass_fraction_foods = 0,
-#                 mass_fraction_metal = 0.1793871391449
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 3.00000e-03, 4.00000e-03,
-#                 5.00000e-03, 6.00000e-03, 6.53900e-03, 6.53900e-03, 8.00000e-03,
-#                 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02, 4.00000e-02,
-#                 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01, 1.50000e-01,
-#                 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01, 6.00000e-01,
-#                 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00, 2.00000e+00,
-#                 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00, 8.00000e+00,
-#                 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 8.093e+03, 2.984e+03, 1.421e+03, 4.851e+02, 2.229e+02, 1.212e+02,
-#                 7.350e+01, 5.803e+01, 4.520e+02, 2.734e+02, 1.514e+02, 5.027e+01,
-#                 2.253e+01, 7.141e+00, 3.169e+00, 1.714e+00, 1.060e+00, 5.306e-01,
-#                 3.367e-01, 1.838e-01, 1.391e-01, 1.062e-01, 9.133e-02, 8.192e-02,
-#                 7.509e-02, 6.537e-02, 5.852e-02, 5.224e-02, 4.769e-02, 4.162e-02,
-#                 3.524e-02, 3.213e-02, 3.045e-02, 2.952e-02, 2.875e-02, 2.871e-02,
-#                 2.951e-02, 3.068e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Manganese",
-#                 mass_fraction_foods = 0,
-#                 mass_fraction_metal = 0.0872020815287706
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.50000e-03, 2.00000e-03, 3.00000e-03, 4.00000e-03,
-#                 5.00000e-03, 6.00000e-03, 7.11200e-03, 7.11200e-03, 8.00000e-03,
-#                 1.00000e-02, 1.50000e-02, 2.00000e-02, 3.00000e-02, 4.00000e-02,
-#                 5.00000e-02, 6.00000e-02, 8.00000e-02, 1.00000e-01, 1.50000e-01,
-#                 2.00000e-01, 3.00000e-01, 4.00000e-01, 5.00000e-01, 6.00000e-01,
-#                 8.00000e-01, 1.00000e+00, 1.25000e+00, 1.50000e+00, 2.00000e+00,
-#                 3.00000e+00, 4.00000e+00, 5.00000e+00, 6.00000e+00, 8.00000e+00,
-#                 1.00000e+01, 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 9.085e+03, 3.399e+05, 1.626e+03, 5.576e+02, 2.567e+02, 1.398e+02,
-#                 8.484e+01, 5.319e+01, 4.076e+02, 3.056e+02, 1.706e+02, 5.708e+01,
-#                 2.568e+01, 8.176e+00, 3.629e+00, 1.958e+00, 1.205e+00, 5.952e-01,
-#                 3.717e-01, 1.964e-01, 1.460e-01, 1.099e-01, 9.400e-02, 8.414e-02,
-#                 7.704e-02, 6.699e-02, 5.995e-02, 5.350e-02, 4.883e-02, 4.265e-02,
-#                 3.621e-02, 3.312e-02, 3.146e-02, 3.057e-02, 2.991e-02, 2.994e-02,
-#                 3.092e-02, 3.224e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Iron",
-#                 mass_fraction_foods = 4.99398225138708e-05,
-#                 mass_fraction_metal = 0.672751601554247
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.00980e-03, 1.01970e-03, 1.01970e-03, 1.03119e-03,
-#                 1.04280e-03, 1.04280e-03, 1.11565e-03, 1.19360e-03, 1.19360e-03,
-#                 1.50000e-03, 2.00000e-03, 3.00000e-03, 4.00000e-03, 5.00000e-03,
-#                 6.00000e-03, 8.00000e-03, 9.65860e-03, 9.65860e-03, 1.00000e-02,
-#                 1.50000e-02, 2.00000e-02, 3.00000e-02, 4.00000e-02, 5.00000e-02,
-#                 6.00000e-02, 8.00000e-02, 1.00000e-01, 1.50000e-01, 2.00000e-01,
-#                 3.00000e-01, 4.00000e-01, 5.00000e-01, 6.00000e-01, 8.00000e-01,
-#                 1.00000e+00, 1.25000e+00, 1.50000e+00, 2.00000e+00, 3.00000e+00,
-#                 4.00000e+00, 5.00000e+00, 6.00000e+00, 8.00000e+00, 1.00000e+01,
-#                 1.50000e+01, 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 1.553e+03, 1.518e+03, 1.484e+03, 3.804e+03, 5.097e+03, 6.518e+03,
-#                 8.274e+03, 8.452e+03, 7.371e+03, 8.396e+03, 4.825e+03, 2.375e+03,
-#                 8.311e+02, 3.865e+02, 2.118e+02, 1.290e+02, 5.875e+01, 3.505e+01,
-#                 2.536e+02, 2.331e+02, 8.117e+01, 3.719e+01, 1.207e+01, 5.384e+00,
-#                 2.892e+00, 1.760e+00, 8.364e-01, 4.973e-01, 2.341e-01, 1.617e-01,
-#                 1.141e-01, 9.539e-02, 8.450e-02, 7.695e-02, 6.656e-02, 5.941e-02,
-#                 5.296e-02, 4.834e-02, 4.235e-02, 3.634e-02, 3.360e-02, 3.225e-02,
-#                 3.160e-02, 3.138e-02, 3.175e-02, 3.335e-02, 3.509e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Zinc",
-#                 mass_fraction_foods = 2.99638935083225e-05,
-#                 mass_fraction_metal = 0
-#             ),
-#         data.frame(
-#             E_MeV = c(
-#                 1.00000e-03, 1.00404e-03, 1.00810e-03, 1.00810e-03, 1.50000e-03,
-#                 2.00000e-03, 3.00000e-03, 4.00000e-03, 5.00000e-03, 6.00000e-03,
-#                 8.00000e-03, 8.33280e-03, 8.33280e-03, 1.00000e-02, 1.50000e-02,
-#                 2.00000e-02, 3.00000e-02, 4.00000e-02, 5.00000e-02, 6.00000e-02,
-#                 8.00000e-02, 1.00000e-01, 1.50000e-01, 2.00000e-01, 3.00000e-01,
-#                 4.00000e-01, 5.00000e-01, 6.00000e-01, 8.00000e-01, 1.00000e+00,
-#                 1.25000e+00, 1.50000e+00, 2.00000e+00, 3.00000e+00, 4.00000e+00,
-#                 5.00000e+00, 6.00000e+00, 8.00000e+00, 1.00000e+01, 1.50000e+01,
-#                 2.00000e+01
-#             ),
-#             mu_cm2_g = c(
-#                 9.855e+03, 9.753e+03, 9.654e+03, 1.099e+04, 4.234e+03, 2.049e+03,
-#                 7.094e+02, 3.282e+02, 1.793e+02, 1.090e+02, 4.952e+01, 4.428e+01,
-#                 3.294e+02, 2.090e+02, 7.081e+01, 3.220e+01, 1.034e+01, 4.600e+00,
-#                 2.474e+00, 1.512e+00, 7.306e-01, 4.440e-01, 2.208e-01, 1.582e-01,
-#                 1.154e-01, 9.765e-02, 8.698e-02, 7.944e-02, 6.891e-02, 6.160e-02,
-#                 5.494e-02, 5.015e-02, 4.387e-02, 3.745e-02, 3.444e-02, 3.289e-02,
-#                 3.210e-02, 3.164e-02, 3.185e-02, 3.320e-02, 3.476e-02
-#             )
-#         ) |>
-#             dplyr::mutate(
-#                 Material = "Nickel",
-#                 mass_fraction_foods = 0,
-#                 mass_fraction_metal = 0.0498297608735832
-#             )
-#     ) |>
-#         dplyr::filter(E_MeV <= 2)
-#
-#     all_E <- unique(materials$E_MeV)
-#
-#     energy_interpolate <- function(element) {
-#         element_subset <- filter(materials, Material == element)
-#
-#         foods_mass_fraction <- element_subset$mass_fraction_foods[1]
-#         metal_mass_fraction <- element_subset$mass_fraction_metal[1]
-#
-#         element_subset <- select(element_subset, E_MeV, mu_cm2_g)
-#
-#         for (energy in all_E) {
-#             if(!(energy %in% element_subset$E_MeV)) {
-#
-#                 lower_energy <- max(element_subset[element_subset$E_MeV < energy,]$E_MeV)
-#                 upper_energy <- min(element_subset[element_subset$E_MeV > energy,]$E_MeV)
-#
-#                 lower_mu <- element_subset[element_subset$E_MeV == lower_energy,]$mu_cm2_g
-#                 upper_mu <- element_subset[element_subset$E_MeV == upper_energy,]$mu_cm2_g
-#
-#                 estimated_mu <-
-#                     lower_mu +
-#                     (((upper_mu - lower_mu) / (upper_energy - lower_energy)) *
-#                          (energy - lower_energy))
-#
-#                 element_subset[nrow(element_subset) + 1,] <- c(energy, estimated_mu)
-#             }
-#         }
-#
-#         element_subset <- dplyr::mutate(
-#             element_subset,
-#             Material = element,
-#             mass_fraction_foods = foods_mass_fraction,
-#             mass_fraction_metal = metal_mass_fraction
-#         )
-#
-#         return(element_subset)
-#     }
-#
-#     materials2 <- rbind(
-#         energy_interpolate("Hydrogen"),
-#         energy_interpolate("Carbon"),
-#         energy_interpolate("Nitrogen"),
-#         energy_interpolate("Oxygen"),
-#         energy_interpolate("Sodium"),
-#         energy_interpolate("Magnesium"),
-#         energy_interpolate("Silicon"),
-#         energy_interpolate("Phosphorus"),
-#         energy_interpolate("Sulfur"),
-#         energy_interpolate("Chlorine"),
-#         energy_interpolate("Argon"),
-#         energy_interpolate("Potassium"),
-#         energy_interpolate("Calcium"),
-#         energy_interpolate("Chromium"),
-#         energy_interpolate("Manganese"),
-#         energy_interpolate("Iron"),
-#         energy_interpolate("Zinc"),
-#         energy_interpolate("Nickel")
-#     ) |>
-#         dplyr::mutate(
-#             Material = as.factor(Material),
-#             density_foods = 0.5006025,
-#             density_metal = 0.3387145,
-#             partial_foods_mu_cm2_g = mass_fraction_foods * mu_cm2_g,
-#             partial_metal_mu_cm2_g = mass_fraction_metal * mu_cm2_g,
-#             partial_foods_mu_cm = density_foods * partial_foods_mu_cm2_g,
-#             partial_metal_mu_cm = density_metal * partial_metal_mu_cm2_g
-#         )
-#
-#     bulk_materials <- dplyr::mutate(
-#         data.frame(E_MeV = all_E),
-#         Foodstuff = 0,
-#         Scrap_Metal = 0
-#     )
-#
-#     for (i in 1:nrow(bulk_materials)) {
-#         subset_i <- filter(materials2, E_MeV == bulk_materials$E_MeV[i])
-#         bulk_materials$Foodstuff[i] <- sum(subset_i$partial_foods_mu_cm)
-#         bulk_materials$Scrap_Metal[i] <- sum(subset_i$partial_metal_mu_cm)
-#     }
-#
-#     bulk_materials <- pivot_longer(
-#         bulk_materials,
-#         cols = c("Foodstuff", "Scrap_Metal"),
-#         names_to = "Material",
-#         values_to = "mu_cm"
-#     )
-#
-#     bulk_materials[
-#         bulk_materials$Material == "Scrap_Metal",
-#     ]$Material <- "Scrap Metal"
-#
-#     interior_atten_coeff <-
-#         dplyr::mutate(bulk_materials, Material = as.factor(Material))
-#
-#     # ----
-#
-#     # ----
-#
-#     # Difference between starred and unstarred tallies ----
-#     star_differences <-
-#         spectral_data |>
-#         dplyr::mutate(
-#             sLF1 = 2 * (
-#                 (LF1 * 1e-3 * Ed_keV) - LsF1) / ((LF1 * 1e-3 * Ed_keV) + LsF1),
-#             sLF2 = 2 * (
-#                 (LF2 * 1e-3 * Ed_keV) - LsF2) / ((LF2 * 1e-3 * Ed_keV) + LsF2),
-#             sLF4 = 2 * (
-#                 (LF4 * 1e-3 * Ed_keV) - LsF4) / ((LF4 * 1e-3 * Ed_keV) + LsF4),
-#             sLF8 = 2 * (
-#                 (LF8 * 1e-3 * Ed_keV) - LsF8) / ((LF8 * 1e-3 * Ed_keV) + LsF8),
-#             sRF1 = 2 * (
-#                 (RF1 * 1e-3 * Ed_keV) - RsF1) / ((RF1 * 1e-3 * Ed_keV) + RsF1),
-#             sRF2 = 2 * (
-#                 (RF2 * 1e-3 * Ed_keV) - RsF2) / ((RF2 * 1e-3 * Ed_keV) + RsF2),
-#             sRF4 = 2 * (
-#                 (RF4 * 1e-3 * Ed_keV) - RsF4) / ((RF4 * 1e-3 * Ed_keV) + RsF4),
-#             sRF8 = 2 * (
-#                 (RF8 * 1e-3 * Ed_keV) - RsF8) / ((RF8 * 1e-3 * Ed_keV) + RsF8)
-#         ) |>
-#         dplyr::select(
-#             sLF1,
-#             sLF2,
-#             sLF4,
-#             sLF8,
-#             sRF1,
-#             sRF2,
-#             sRF4,
-#             sRF8
-#         ) |>
-#         tidyr::pivot_longer(
-#             cols = c("sLF1", "sLF2", "sLF4","sLF8", "sRF1","sRF2", "sRF4","sRF8"),
-#             names_to = "tally",
-#             values_to = "RelativeDifference"
-#         ) |>
-#         dplyr::filter(RelativeDifference <= 0.5) |>
-#         dplyr::filter(!is.nan(RelativeDifference)) |>
-#         ggplot2::ggplot() +
-#         ggplot2::geom_histogram(
-#             mapping = ggplot2::aes(
-#                 x = RelativeDifference,
-#                 y = ggplot2::after_stat(density)
-#             ),
-#             binwidth = 0.01,
-#             na.rm = TRUE
-#         ) +
-#         ggplot2::xlab("Relative Difference") +
-#         ggplot2::scale_x_continuous(limits = c(0,0.5), expand = c(0,0)) +
-#         ggplot2::ylab(NULL) +
-#         ggplot2::scale_y_continuous(expand = c(0,0)) +
-#         ggplot2::ggtitle(
-#             "Distribution of Differences",
-#             subtitle = "Particle and Radiant Energy Tallies"
-#         ) +
-#         ggplot2::theme_bw()
-#
-#     # Differences between tallies on left and right monitor----
-#     parity_differences <-
-#         spectral_data |>
-#         dplyr::mutate(
-#             sLF1 = 2 * (LF1 - RF1) / (LF1 + RsF1),
-#             sLF2 = 2 * (LF2 - RF2) / (LF2 + RsF2),
-#             sLF4 = 2 * (LF4 - RF4) / (LF4 + RsF4),
-#             sLF8 = 2 * (LF8 - RF8) / (LF8 + RsF8)
-#         ) |>
-#         dplyr::select(
-#             sLF1,
-#             sLF2,
-#             sLF4,
-#             sLF8,
-#         ) |>
-#         tidyr::pivot_longer(
-#             cols = c("sLF1", "sLF2", "sLF4","sLF8"),
-#             names_to = "tally",
-#             values_to = "RelativeDifference"
-#         ) |>
-#         ggplot2::ggplot(ggplot2::aes(
-#             x = RelativeDifference,
-#             y = ggplot2::after_stat(density)
-#         )) +
-#         ggplot2::geom_histogram(
-#             binwidth = 0.01, na.rm = TRUE
-#         ) +
-#         ggplot2::xlab("Relative Difference") +
-#         ggplot2::scale_x_continuous(limits = c(-2,2), expand = c(0,0)) +
-#         ggplot2::ylab(NULL) +
-#         ggplot2::scale_y_continuous(expand = c(0,0)) +
-#         ggplot2::ggtitle("Differences between Left and Right Tallies") +
-#         ggplot2::theme_bw()
-#
-#     # ----
-#
-#
-#
-#     # Return figures ----
-#     return(list(
-#     star_differences = star_differences,
-#
-#     parity_differences = parity_differences
-#         ,
-#     prob_reach =
-#         summary_data |>
-#         ggplot2::ggplot() +
-#         ggplot2::geom_line(
-#             mapping = aes(x = Es_keV, y = PrReach, color = as.factor(y_cm)),
-#             linewidth = 1
-#         ) +
-#         ggplot2::facet_grid(
-#             cols = vars(contents),
-#             labeller = as_labeller(c("m"="Scrap Metal", "f"="Foodstuff"))
-#         ) +
-#         scale_x_continuous(limits = c(0,2000)) +
-#         xlab("Source Energy (keV)") +
-#         scale_y_continuous(
-#             trans = "log10",
-#             limits = c(1e-9, 1e-1),
-#             n.breaks = 10,
-#             labels = scales::trans_format("log10", scales::math_format(10^.x))
-#         ) +
-#         ylab("Probability (Log10 Scale)") +
-#         scale_color_hue(
-#             name = "Distance (cm): ",
-#             breaks = c(0, -250, -500, -750, -1000, -1250, -1500),
-#             labels = c("0     ", "250 ", "500 ", "750 ", "1000", "1250", "1500")
-#         ) +
-#         guides(color = guide_legend(nrow = 1)) +
-#         ggtitle("Probability of Photon Reaching Detector") +
-#         theme_bw()  +
-#         theme(
-#             legend.position = "top",
-#             legend.title = element_text(size=7),
-#             legend.text = element_text(size=7),
-#             strip.background = element_rect(fill = "white")
-#         ),
-#     interior_atten_coeff =
-#         interior_atten_coeff |>
-#         ggplot() +
-#         geom_line(mapping = aes(x = 1000 * E_MeV, y = mu_cm, color = Material)) +
-#         scale_x_continuous(limits = c(0,2000)) +
-#         xlab("Source Energy (keV)") +
-#         scale_y_continuous(
-#             trans = "log10",
-#             limits = c(1e-2, 1e5),
-#             n.breaks = 10,
-#             labels = scales::trans_format("log10", scales::math_format(10^.x))
-#         ) +
-#         ylab("Attenuation Coefficienty (1 / cm)") +
-#         ggtitle("Attenuation Coefficients of Truck Cargo") +
-#         theme_bw(),
-#     # Probability of Detection
-#     prob_det =
-#         summary_data |>
-#         ggplot2::ggplot() +
-#         ggplot2::geom_line(
-#             mapping = ggplot2::aes(
-#                 x = Es_keV,
-#                 y = PrDet,
-#                 color = as.factor(y_cm)
-#             ),
-#             linewidth = 1
-#         ) +
-#         fggplot2::acet_grid(
-#             cols = ggplot2::vars(contents),
-#             labeller = ggplot2::as_labeller(c(
-#                 "m"="Scrap Metal",
-#                 "f"="Foodstuff"
-#             ))
-#         ) +
-#         ggplot2::scale_x_continuous(limits = c(0,2000)) +
-#         ggplot2::xlab("Source Energy (keV)") +
-#         ggplot2::scale_y_continuous(
-#             trans = "log10",
-#             limits = c(1e-9, 1e-1),
-#             n.breaks = 10,
-#             labels = scales::trans_format("log10", scales::math_format(10^.x))
-#         ) +
-#         ggplot2::ylab("Probability (Log10 Scale)") +
-#         ggplot2::scale_color_hue(
-#             name = "Distance (cm): ",
-#             breaks = c(0, -250, -500, -750, -1000, -1250, -1500),
-#             labels = c("0     ", "250 ", "500 ", "750 ", "1000", "1250", "1500")
-#         ) +
-#         ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
-#         ggplot2::ggtitle("Probability of Photon Detection") +
-#         ggplot2::theme_bw() +
-#         ggplot2::theme(
-#             legend.position = "top",
-#             legend.title = ggplot2::element_text(size=7),
-#             legend.text = ggplot2::element_text(size=7),
-#             strip.background = ggplot2::element_rect(fill = "white")
-#         ),
-#     source_spatial =
-#         #####count_rate_data_discrete |>
-#         ggplot2::ggplot() +
-#         ggplot2::geom_line(mapping = ggplot2::aes(
-#             x = y_cm,
-#             y = count_rate,
-#             color = source
-#         )) +
-#         ggplot2::facet_grid(
-#             cols = ggplot2::vars(contents),
-#             labeller = ggplot2::as_labeller(c(
-#                 "m"="Scrap Metal",
-#                 "f"="Foodstuff"
-#             ))
-#         ) +
-#         ggplot2::scale_x_continuous(
-#             limits = c(-1500, 1500)
-#         ) +
-#         ggplot2::xlab("Distance (cm)") +
-#         ggplot2::scale_y_continuous(
-#             trans = "log10",
-#             limits = c(1e-7, 1e-1),
-#             n.breaks = 7,
-#             labels = scales::trans_format("log10", scales::math_format(10^.x))
-#         ) +
-#         ggplot2::ylab("Count Rate (cps / Bq)") +
-#         ggplot2::scale_color_hue(name = "Source") +
-#         ggplot2::ggtitle("Count Rate of Sources Approaching Detector") +
-#         ggplot2::theme(
-#             legend.position = "right",
-#             legend.title = ggplot2::element_text(size=7),
-#             legend.text = ggplot2::element_text(size=7)
-#         ) +
-#         ggplot2::theme_bw() +
-#         ggplot2::theme(
-#             strip.background = ggplot2::element_rect(fill = "white")
-#         ),
-#     intrinsic_efficiency =
-#         #####intrinsic_data |>
-#         ggplot2::ggplot(
-#             data = _,
-#             ggplot2::aes(x = E_keV, y = value, color = Type)) +
-#         ggplot2::geom_point(shape = "o") +
-#         ggplot2::xlab("Energy (keV)") +
-#         ggplot2::scale_x_continuous(limits = c(0,2000)) +
-#         ggplot2::ylab("Intrinsic Efficiency") +
-#         ggplot2::scale_y_continuous(limits = c(0,1)) +
-#         ggplot2::scale_color_hue(
-#             name = "Type",
-#             breaks = c("all", "closest", "isotropic"),
-#             labels = c("Truck; y = all", "Truck; y=0 cm", "Bare Isotropic")) +
-#         ggplot2::ggtitle("Measured Intrinsic Efficiency") +
-#         ggplot2::theme_bw(),
-#     lm_diagnostics = ggpubr::ggarrange(
-#         ggpubr::ggarrange(
-#             linear_model |>
-#                 broom::augment() |>
-#                 ggplot2::ggplot() +
-#                 ggplot2::geom_histogram(
-#                     mapping = ggplot2::aes(
-#                         x = .std.resid,
-#                         y = ggplot2::after_stat(density)
-#                     ),
-#                     bins = bin_number(
-#                         broom::augment(linear_model)$.std.resid
-#                         )
-#                 ) +
-#                 ggplot2::geom_line(
-#                     data = dplyr::mutate(
-#                         data.frame(abscissa = -80:40 / 20),
-#                         ordinate = dnorm(abscissa)),
-#                     mapping = aes(x = abscissa, y = ordinate)) +
-#                 ggplot2::xlab("Relative Residuals") +
-#                 ggplot2::ylab("") +
-#                 ggplot2::ggtitle(
-#                     "Distribution of Residuals",
-#                     subtitle = "Line indicates standard normal distribution") +
-#                 ggplot2::theme_bw(),
-#             linear_model |>
-#                 broom::augment() |>
-#                 ggplot2::ggplot(ggplot2::aes(sample = .resid)) +
-#                 ggplot2::geom_qq() +
-#                 ggplot2::geom_qq_line() +
-#                 ggplot2::xlab("Quantiles of Standard Normal") +
-#                 ggplot2::ylab("Quantiles of Residuals") +
-#                 ggplot2::ggtitle(
-#                     "Quantile-Quantile Plot of Residuals",
-#                     subtitle = "Line indicates normal distribution") +
-#                 ggplot2::theme_bw(),
-#             ncol = 2
-#         ),
-#         linear_model |>
-#             broom::augment() |>
-#             ggplot2::ggplot() +
-#             ggplot2::geom_point(mapping = ggplot2::aes(
-#                 x = .fitted,
-#                 y = .resid,
-#                 color = trans_kev,
-#                 alpha = trans_cm
-#             )) +
-#             ggplot2::facet_grid(
-#                 rows = ggplot2::vars(contents),
-#                 labeller = ggplot2::as_labeller(c(
-#                     "m"="Scrap Metal",
-#                     "f"="Foodstuff"
-#                 ))
-#             ) +
-#             ggplot2::xlab("Fitted Values of Ln(Efficiency)") +
-#             ggplot2::ylab("Residuals of Ln(Efficiency)") +
-#             ggplot2::ggtitle("Residuals vs. Fitted Values of Linear Model") +
-#             ggplot2::scale_color_continuous(
-#                 name = "Ln(Source\n\ \ \ Energy)"
-#             ) +
-#             ggplot2::scale_alpha_continuous(name = "Ln(Distance)") +
-#             ggplot2::theme_bw() +
-#             ggplot2::theme(
-#                 legend.position = "top",
-#                 legend.title = ggplot2::element_text(size=7),
-#                 legend.text = ggplot2::element_text(size=7),
-#                 strip.background = ggplot2::element_rect(fill = "white")
-#             ),
-#         nrow = 2
-#     ) |>
-#         ggpubr::annotate_figure(top = "Diagnostic Plots for Linear Model"),
-#     lm_comparison =
-#         summary_data |>
-#         predict_efficiency(method = "lm") |>
-#         ggplot2::ggplot() +
-#         ggplot2::geom_line(
-#             mapping = ggplot2::aes(
-#                 x = Es_keV,
-#                 y = efficiency,
-#                 color = as.factor(y_cm)
-#             ),
-#             linewidth = 1
-#         ) +
-#         ggplot2::geom_point(
-#             mapping = ggplot2::aes(
-#                 x = Es_keV,
-#                 y = PrDet,
-#                 color = as.factor(y_cm)
-#             ),
-#             size = 1
-#         ) +
-#         ggplot2::facet_grid(
-#             cols = ggplot2::vars(contents),
-#             labeller = ggplot2::as_labeller(c(
-#                 "m"="Scrap Metal",
-#                 "f"="Foodstuff"
-#             ))
-#         ) +
-#         ggplot2::scale_x_continuous(limits = c(0,2000)) +
-#         ggplot2::xlab("Source Energy (keV)") +
-#         ggplot2::scale_y_continuous(
-#             trans = "log10",
-#             limits = c(1e-9, 1e-1),
-#             n.breaks = 10,
-#             labels = scales::trans_format("log10", scales::math_format(10^.x))
-#         ) +
-#         ggplot2::ylab("Probability (Log10 Scale)") +
-#         ggplot2::scale_color_hue(
-#             name = "Distance (cm): ",
-#             breaks = c(0, -250, -500, -750, -1000, -1250, -1500),
-#             labels = c(
-#                 "0     ",
-#                 "250 ",
-#                 "500 ",
-#                 "750 ",
-#                 "1000",
-#                 "1250",
-#                 "1500"
-#             )
-#         ) +
-#         ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
-#         ggplot2::ggtitle(
-#             "Probability of Photon Detection",
-#             subtitle = "Points denote MCNP values, lines denote fitted values.") +
-#         ggplot2::theme_bw() +
-#         ggplot2::theme(
-#             legend.position = "top",
-#             legend.title = ggplot2::element_text(size=7),
-#             legend.text = ggplot2::element_text(size=7),
-#             strip.background = ggplot2::element_rect(fill = "white")
-#         ),
-#     lm_contour =
-#         rbind(
-#             dplyr::mutate(data.frame(
-#                 y_cm = rep(-50:50 * 10, times = 151),
-#                 Es_keV = rep(50:200 * 10, each = 101)),
-#                 contents = "m"
-#             ),
-#             dplyr::mutate(data.frame(
-#                 y_cm = rep(-50:50 * 10, times = 151),
-#                 Es_keV = rep(50:200 * 10, each = 101)),
-#                 contents = "f"
-#             )
-#         ) |>
-#         predict_efficiency(method = "lm") |>
-#         ggplot2::ggplot(
-#             ggplot2::aes(x = Es_keV, y = y_cm, z = 100*(efficiency))
-#         ) +
-#         ggplot2::facet_grid(
-#             rows = ggplot2::vars(contents),
-#             labeller = ggplot2::as_labeller(c(
-#                 "m"="Scrap Metal",
-#                 "f"="Foodstuff"
-#             ))
-#         ) +
-#         ggplot2::geom_contour_filled(bins = 9) +
-#         ggplot2::scale_fill_viridis_d(
-#             name = "Efficiency (%)",
-#             option = "F",
-#             begin = 1,
-#             end = 0) +
-#         ggplot2::scale_x_continuous(expand = c(0,0)) +
-#         ggplot2::xlab("Source Energy (keV)") +
-#         ggplot2::scale_y_continuous(expand = c(0.,0.)) +
-#         ggplot2::ylab("Truck Position (cm)") +
-#         ggplot2::ggtitle(
-#             "Detection Efficiency for Different\nSource Energies and Positions"
-#         ) +
-#         ggplot2::theme_bw() +
-#         ggplot2::theme(
-#             legend.position = "right",
-#             legend.title = ggplot2::element_text(size=14),
-#             legend.text = ggplot2::element_text(size=12),
-#             strip.background = ggplot2::element_rect(fill = "white"),
-#             panel.spacing = ggplot2::unit(1, "lines")
-#         ),
-#     lm_net_counts =
-#         ######count_rate_data_lm |>
-#         ggplot() +
-#         ggplot2::geom_line(mapping = ggplot2::aes(
-#             x = y_cm,
-#             y = net_counts_cumulative,
-#             color = source)) +
-#         ggplot2::facet_grid(
-#             cols = ggplot2::vars(contents),
-#             labeller = ggplot2::as_labeller(c(
-#                 "m"="Scrap Metal",
-#                 "f"="Foodstuff"
-#             ))
-#         ) +
-#         ggplot2::scale_color_hue(name = "Source") +
-#         ggplot2::xlab("Distance (cm)") +
-#         ggplot2::ylab("Net Counts (counts / Bq)") +
-#         ggplot2::ggtitle("Net Counts of Source Along Trajectory") +
-#         ggplot2::theme_bw() +
-#         ggplot2::theme(
-#             strip.background = ggplot2::element_rect(fill = "white")
-#         ),
-# ))}
-#
-# pmder_figs()
-#
-#     # Linear Model Diagnostics
-#
-#     # Linear Model Comparison
-#
-#     # Linear Model Contour Plot
-#
-#     # Linear model net counts
-#
-#     # Linear model time derivative
-#     lm_time_derivative =
-#         count_rate_data_lm |>
-#         ggplot() +
-#         geom_line(mapping = aes(
-#             x = y_cm,
-#             y = count_rate_derivative,
-#             color = source)) +
-#         facet_grid(
-#             cols = vars(contents),
-#             labeller = as_labeller(c("m"="Scrap Metal", "f"="Foodstuff"))) +
-#         scale_color_hue(name = "Source") +
-#         xlab("Distance (cm)") +
-#         ylab("Count Rate Derivative (cps / Bq / s)") +
-#         ggtitle("Count Rate Derivative for\nSources Along Trajectory") +
-#         theme_bw() +
-#         theme(
-#             strip.background = element_rect(fill = "white"),
-#             legend.position = "top"),
-#     # Earth Model Diagnostics
-#     earth_diagnostics = ggarrange(
-#         ggarrange(
-#             earth_model_aug |>
-#                 ggplot() +
-#                 geom_histogram(
-#                     mapping = aes(x = .std.resid, y = after_stat(density)),
-#                     bins = bin_number(earth_model_aug$.std.resid)) +
-#                 geom_line(
-#                     data = mutate(
-#                         data.frame(abscissa = -100:50 / 20),
-#                         ordinate = dnorm(abscissa)),
-#                     mapping = aes(x = abscissa, y = ordinate)) +
-#                 xlab("Relative Residuals") +
-#                 ylab("") +
-#                 ggtitle(
-#                     "Distribution of Residuals",
-#                     subtitle = "Line indicates standard normal distribution") +
-#                 theme_bw(),
-#             earth_model_aug |>
-#                 ggplot(aes(sample = .resid)) +
-#                 geom_qq() +
-#                 geom_qq_line() +
-#                 xlab("Quantiles of Standard Normal") +
-#                 ylab("Quantiles of Residuals") +
-#                 ggtitle(
-#                     "Quantile-Quantile Plot of Residuals",
-#                     subtitle = "Line indicates normal distribution") +
-#                 theme_bw(),
-#             ncol = 2
-#         ),
-#         earth_model_aug |>
-#             ggplot() +
-#             geom_point(mapping = aes(
-#                 x = .fitted,
-#                 y = .resid,
-#                 color = Es_keV,
-#                 alpha = y_cm
-#             )) +
-#             facet_grid(
-#                 rows = vars(contents),
-#                 labeller = as_labeller(c("m"="Scrap Metal", "f"="Foodstuff"))
-#             ) +
-#             xlab("Fitted Values of Ln(Efficiency)") +
-#             ylab("Residuals of Ln(Efficiency)") +
-#             ggtitle("Residuals vs. Fitted Values") +
-#             scale_color_continuous(name = "Source\n\ \ \ Energy") +
-#             scale_alpha_continuous(name = "Distance") +
-#             theme_bw() +
-#             theme(
-#                 legend.position = "top",
-#                 legend.title = element_text(size=7),
-#                 legend.text = element_text(size=7),
-#                 strip.background = element_rect(fill = "white")
-#             ),
-#         nrow = 2
-#     ) |>
-#         annotate_figure(top = "Diagnostic Plots for MARS Model"),
-#     # Earth Comparison
-#     earth_comparison = earth_comparison,
-#     # Earth Model Contour Plot
-#     earth_contour = rbind(
-#         mutate(data.frame(
-#             y_cm = rep(-50:50 * 10, times = 151),
-#             Es_keV = rep(50:200 * 10, each = 101)), contents = "m"),
-#         mutate(data.frame(
-#             y_cm = rep(-50:50 * 10, times = 151),
-#             Es_keV = rep(50:200 * 10, each = 101)), contents = "f")
-#     ) |> predict_efficiency(method = "earth") |> ggplot(aes(x = Es_keV, y = y_cm, z = 100*(efficiency))) +
-#         facet_grid(
-#             rows = vars(contents),
-#             labeller = as_labeller(c("m"="Scrap Metal", "f"="Foodstuff"))
-#         ) +
-#         geom_contour_filled(bins = 9) +
-#         scale_fill_viridis_d(
-#             name = "Efficiency (%)",
-#             option = "F",
-#             begin = 1,
-#             end = 0) +
-#         scale_x_continuous(expand = c(0,0)) +
-#         xlab("Source Energy (keV)") +
-#         scale_y_continuous(expand = c(0.,0.)) +
-#         ylab("Truck Position (cm)") +
-#         ggtitle(
-#             "Detection Efficiency for Different\nSource Energies and Positions") +
-#         theme_bw() +
-#         theme(
-#             legend.position = "right",
-#             legend.title = element_text(size=14),
-#             legend.text = element_text(size=12),
-#             strip.background = element_rect(fill = "white"),
-#             panel.spacing = unit(1, "lines")
-#         ),
-#     earth_count_rate =
-#         count_rate_data_earth |>
-#         ggplot() +
-#         # geom_linerange(mapping = aes(
-#         #     x = y_cm,
-#         #     ymin = =u_count_per_decay,
-#         #     ymax = u_count_per_decay,
-#         #     color = source)) +
-#         geom_line(mapping = aes(
-#             x = y_cm,
-#             y = count_rate,
-#             color = source)) +
-#         facet_grid(
-#             cols = vars(contents),
-#             labeller = as_labeller(c("m"="Scrap Metal", "f"="Foodstuff"))) +
-#         # geom_point(
-#         #     data = count_rate_data_discrete,
-#         #     mapping = aes(x = y_cm, y = count_per_decay, color = source)) +
-#         # geom_pointrange(
-#         #     data = count_rate_data_discrete,
-#         #     mapping = aes(
-#         #         x = y_cm,
-#         #         y = count_per_decay,
-#         #         ymin = count_per_decay - u_count_per_decay,
-#         #         ymax = count_per_decay + u_count_per_decay,
-#         #         color = source),
-#     #     size = 0.5) +
-#     scale_x_continuous(
-#         limits = c(-1500, 1500)
-#     ) +
-#         xlab("Distance (cm)") +
-#         # scale_y_continuous(
-#         #     trans = "log10",
-#         #     limits = c(1e-5, 1e0),
-#         #     n.breaks = 7,
-#         #     labels = scales::trans_format("log10", scales::math_format(10^.x))) +
-#         ylab("Count Rate (cps / Bq)") +
-#         scale_color_hue(name = "Source") +
-#         ggtitle("Count Rate Sources Approaching Detector") +
-#         theme_bw() +
-#         theme(
-#             legend.position = "top",
-#             legend.title = element_text(size=7),
-#             legend.text = element_text(size=7),
-#             strip.background = element_rect(fill = "white")
-#         )
-# )
-#
-#
-# save(figures, file = "figures.rda")
+#' Return figures used for pmder data visualization
+#'
+#' @param fig_name string, Name of the figure.
+#' @param color_style string, color to be passed to scale_colour_viridis
+#'
+#' @export
+#'
+#' @examples fig("prob_det_energy") will return the efficiency as a function of the energy
+#' @examples fig("") will return a list of potential figures
+fig <- function(fig_name, color_style = "plasma") {
+
+    if (fig_name == "interior_atten_coeff") {
+        plt <-
+            data.frame(
+                E_MeV = c(
+                    0.001, 0.001, 0.0015, 0.0015, 0.002, 0.002, 0.003,
+                    0.003, 0.004, 0.004, 0.005, 0.005, 0.006, 0.006, 0.008,
+                    0.008, 0.01, 0.01, 0.015, 0.015, 0.02, 0.02, 0.03,
+                    0.03, 0.04, 0.04, 0.05, 0.05, 0.06, 0.06, 0.08, 0.08,
+                    0.1, 0.1, 0.15, 0.15, 0.2, 0.2, 0.3, 0.3, 0.4, 0.4,
+                    0.5, 0.5, 0.6, 0.6, 0.8, 0.8, 1, 1, 1.25, 1.25, 1.5,
+                    1.5, 2, 2, 0.00103542, 0.00103542, 0.0010721,
+                    0.0010721, 0.00114237, 0.00114237, 0.001305, 0.001305,
+                    0.0018389, 0.0018389, 0.0021455, 0.0021455, 0.002472,
+                    0.002472, 0.0028224, 0.0028224, 0.0032029, 0.0032029,
+                    0.0036074, 0.0036074, 0.0040381, 0.0040381, 0.0059892,
+                    0.0059892, 0.006539, 0.006539, 0.007112, 0.007112,
+                    0.0010098, 0.0010098, 0.0010197, 0.0010197, 0.00103119,
+                    0.00103119, 0.0010428, 0.0010428, 0.00111565,
+                    0.00111565, 0.0011936, 0.0011936, 0.0096586, 0.0096586,
+                    0.00100404, 0.00100404, 0.0010081, 0.0010081,
+                    0.0083328, 0.0083328
+                ),
+                Material = as.factor(c(
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal",
+                    "Foodstuff", "Scrap Metal", "Foodstuff", "Scrap Metal"
+                )),
+                mu_cm = c(
+                    1757.68436640017, 2934.59565593209, 597.874324343362,
+                    77779.5680915577, 263.108550789681, 530.287994665669,
+                    84.5054946879393, 181.830484934846, 37.1220965378754,
+                    83.6717753906472, 19.2197556576055, 45.5492706074377,
+                    11.1570209359588, 55.0095948045152, 4.72794645499967,
+                    93.9551568497537, 2.44495610222524, 55.36754658186,
+                    0.777923655094276, 18.4862663753955, 0.381716299925961,
+                    8.30864892289049, 0.181077907891391, 2.6427526232671,
+                    0.131059027348193, 1.17346808582831, 0.111614499000265,
+                    0.633922804299104, 0.101618931142086,
+                    0.390914604933908, 0.0909529727995325,
+                    0.194149477428227, 0.0846674408966, 0.121994677801205,
+                    0.0747520801127955, 0.0652874576855549,
+                    0.068071066640188, 0.0488804954173088,
+                    0.0589577579301638, 0.037004704101759,
+                    0.0527497703673374, 0.0317147378349514,
+                    0.0481457980847012, 0.0284123901805244,
+                    0.0445143905348407, 0.0260261805077695,
+                    0.0390948726690168, 0.0226407832172357,
+                    0.0351473037254325, 0.020265280624407,
+                    0.0314266415241883, 0.0180871482695365,
+                    0.0286000914495581, 0.0165077959345551,
+                    0.0245495234540621, 0.0144119178202005,
+                    1675.42769686071, 8234.86099037987, 1593.84685051627,
+                    13725.6265344653, 1427.22359121216, 24244.6040367249,
+                    1050.32189195335, 48589.2932524994, 370.970083028677,
+                    25422.4473039222, 238.33069706415, 479.810874666379,
+                    179.753201675378, 365.878828154937, 116.344920246784,
+                    243.702399723152, 74.7286800470196, 161.930769231225,
+                    56.4060302671592, 122.207813855207, 36.5551992251371,
+                    82.2193079584069, 11.2440984709526, 64.1337662312931,
+                    9.42251446428816, 59.7548879209116, 7.58878571054552,
+                    133.117012881307, 1734.90822210026, 4399.70795767898,
+                    1711.95674852177, 5881.67575720039, 1685.25063191402,
+                    7601.65656694799, 1658.41473528191, 9339.60062275038,
+                    1489.20923270671, 20244.7879151883, 1308.50750861473,
+                    31913.4131649554, 2.83594222861884, 61.8446224719225,
+                    1748.29501711735, 3538.38803327637, 1738.85918590739,
+                    4330.71854587743, 4.34755035121363, 92.557470141899
+                )
+            )|>
+            ggplot2::ggplot() +
+            ggplot2::geom_line(
+                mapping = ggplot2::aes(
+                    x = 1000 * E_MeV,
+                    y = mu_cm,
+                    linetype = Material
+                )
+            ) +
+            ggplot2::scale_x_continuous(
+                trans = "log10",
+                limits = c(1,2000),
+                expand = c(0,0),
+                labels = scales::trans_format(
+                    "log10",
+                    scales::math_format(10^.x)
+                )
+            ) +
+            ggplot2::xlab("Energy (keV)") +
+            ggplot2::scale_y_continuous(
+                trans = "log10",
+                limits = c(1e-2, 1e5),
+                n.breaks = 10,
+                labels = scales::trans_format(
+                    "log10",
+                    scales::math_format(10^.x)
+                )
+            ) +
+            ggplot2::ylab("Attenuation Coefficienty (1 / cm)") +
+            ggplot2::ggtitle("Attenuation Coefficients of Truck Cargo") +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+                legend.position = "bottom",
+                strip.background = ggplot2::element_rect(
+                    fill = "white"
+                )
+            )
+    }
+
+    else if (fig_name == "star_differences") {
+
+        plt <-
+            spectral_data |>
+            dplyr::mutate(
+                sLF1 =
+                    2 *
+                    ((LF1 * 1e-3 * Ed_keV) - LsF1) /
+                    ((LF1 * 1e-3 * Ed_keV) + LsF1),
+                sLF2 =
+                    2 *
+                    ((LF2 * 1e-3 * Ed_keV) - LsF2) /
+                    ((LF2 * 1e-3 * Ed_keV) + LsF2),
+                sLF4 =
+                    2 *
+                    ((LF4 * 1e-3 * Ed_keV) - LsF4) /
+                    ((LF4 * 1e-3 * Ed_keV) + LsF4),
+                sLF8 =
+                    2 *
+                    ((LF8 * 1e-3 * Ed_keV) - LsF8) /
+                    ((LF8 * 1e-3 * Ed_keV) + LsF8),
+                sRF1 =
+                    2 *
+                    ((RF1 * 1e-3 * Ed_keV) - RsF1) /
+                    ((RF1 * 1e-3 * Ed_keV) + RsF1),
+                sRF2 =
+                    2 *
+                    ((RF2 * 1e-3 * Ed_keV) - RsF2) /
+                    ((RF2 * 1e-3 * Ed_keV) + RsF2),
+                sRF4 =
+                    2 *
+                    ((RF4 * 1e-3 * Ed_keV) - RsF4) /
+                    ((RF4 * 1e-3 * Ed_keV) + RsF4),
+                sRF8 =
+                    2 *
+                    ((RF8 * 1e-3 * Ed_keV) - RsF8) /
+                    ((RF8 * 1e-3 * Ed_keV) + RsF8)
+            ) |>
+            dplyr::select(
+                sLF1,
+                sLF2,
+                sLF4,
+                sLF8,
+                sRF1,
+                sRF2,
+                sRF4,
+                sRF8
+            ) |>
+            tidyr::pivot_longer(
+                cols = c(
+                    "sLF1", "sLF2", "sLF4","sLF8", "sRF1","sRF2", "sRF4","sRF8"
+                ),
+                names_to = "tally",
+                values_to = "RelativeDifference"
+            ) |>
+            dplyr::filter(RelativeDifference <= 0.5) |>
+            dplyr::filter(!is.nan(RelativeDifference)) |>
+            ggplot2::ggplot() +
+            ggplot2::geom_histogram(
+                mapping = ggplot2::aes(
+                    x = RelativeDifference,
+                    y = ggplot2::after_stat(density)
+                ),
+                binwidth = 0.01,
+                na.rm = TRUE
+            ) +
+            ggplot2::xlab("Relative Difference") +
+            ggplot2::scale_x_continuous(
+                limits = c(0,0.5), expand = c(0,0)
+            ) +
+            ggplot2::ylab(NULL) +
+            ggplot2::scale_y_continuous(expand = c(0,0)) +
+            ggplot2::ggtitle(
+                "Distribution of Differences",
+                subtitle = "Particle and Radiant Energy Tallies"
+            ) +
+            ggplot2::theme_bw()
+    }
+
+    else if (fig_name == "parity_differences") {
+
+        plt <-
+            spectral_data |>
+            dplyr::mutate(
+                sLF1 = 2 * (LF1 - RF1) / (LF1 + RsF1),
+                sLF2 = 2 * (LF2 - RF2) / (LF2 + RsF2),
+                sLF4 = 2 * (LF4 - RF4) / (LF4 + RsF4),
+                sLF8 = 2 * (LF8 - RF8) / (LF8 + RsF8)
+            ) |>
+            dplyr::select(
+                sLF1,
+                sLF2,
+                sLF4,
+                sLF8,
+            ) |>
+            tidyr::pivot_longer(
+                cols = c("sLF1", "sLF2", "sLF4","sLF8"),
+                names_to = "tally",
+                values_to = "RelativeDifference"
+            ) |>
+            ggplot2::ggplot(ggplot2::aes(
+                x = RelativeDifference,
+                y = ggplot2::after_stat(density)
+            )) +
+            ggplot2::geom_histogram(
+                binwidth = 0.01, na.rm = TRUE
+            ) +
+            ggplot2::xlab("Relative Difference") +
+            ggplot2::scale_x_continuous(limits = c(-2,2), expand = c(0,0)) +
+            ggplot2::ylab(NULL) +
+            ggplot2::scale_y_continuous(expand = c(0,0)) +
+            ggplot2::ggtitle("Differences between Left and Right Tallies") +
+            ggplot2::theme_bw()
+    }
+
+    else if (fig_name == "prob_reach") {
+
+        plt <-
+            summary_data |>
+            ggplot2::ggplot(ggplot2::aes(
+                x = Es_keV,
+                y = PrReach,
+                color = as.factor(y_cm)
+            )) +
+            ggplot2::geom_point(size = 1) +
+            ggplot2::geom_line(linewidth = 0.5) +
+            ggplot2::facet_grid(
+                cols = ggplot2::vars(contents),
+                labeller = ggplot2::as_labeller(
+                    c("m"="Scrap Metal", "f"="Foodstuff")
+                )
+            ) +
+            ggplot2::scale_x_continuous(
+                limits = c(0,2090),
+                expand = c(0,0)
+            ) +
+            ggplot2::xlab("Source Energy (keV)") +
+            ggplot2::scale_y_continuous(
+                trans = "log10",
+                limits = c(1e-9, 1e-1),
+                n.breaks = 10,
+                labels = scales::trans_format(
+                    "log10",
+                    scales::math_format(10^.x)
+                )
+            ) +
+            ggplot2::scale_colour_viridis_d(
+                name = "Distance (cm): ",
+                breaks = c(
+                    0, -250, -500, -750, -1000, -1250, -1500
+                ),
+                labels = c(
+                    "0     ", "250 ", "500 ", "750 ", "1000",
+                    "1250", "1500"
+                ),
+                direction = -1,
+                option = color_style
+            ) +
+            ggplot2::ylab("Probability (Log10 Scale)") +
+            ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
+            ggplot2::ggtitle(
+                "Probability of Photon Reaching Detector"
+            ) +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+                legend.position = "top",
+                legend.title = ggplot2::element_text(size=7),
+                legend.text = ggplot2::element_text(size=7),
+                strip.background = ggplot2::element_rect(
+                    fill = "white"
+                )
+            )
+    }
+
+    else if (fig_name == "prob_det_energy") {
+        plt <-
+            summary_data |>
+            ggplot2::ggplot(ggplot2::aes(
+                x = Es_keV,
+                y = PrDet,
+                color = as.factor(y_cm)
+            )) +
+            ggplot2::geom_point(size = 1) +
+            ggplot2::geom_line(linewidth = 0.5) +
+            ggplot2::facet_grid(
+                cols = ggplot2::vars(contents),
+                labeller = ggplot2::as_labeller(
+                    c("m"="Scrap Metal", "f"="Foodstuff")
+                )
+            ) +
+            ggplot2::scale_x_continuous(
+                limits = c(0,2090),
+                expand = c(0,0)
+            ) +
+            ggplot2::xlab("Source Energy (keV)") +
+            ggplot2::scale_y_continuous(
+                trans = "log10",
+                limits = c(1e-9, 1e-1),
+                n.breaks = 10,
+                labels = scales::trans_format(
+                    "log10",
+                    scales::math_format(10^.x)
+                )
+            ) +
+            ggplot2::scale_colour_viridis_d(
+                name = "Distance (cm): ",
+                breaks = c(
+                    0, -250, -500, -750, -1000, -1250, -1500
+                ),
+                labels = c(
+                    "0     ", "250 ", "500 ", "750 ", "1000",
+                    "1250", "1500"
+                ),
+                direction = -1,
+                option = color_style
+            ) +
+            ggplot2::ylab("Probability (Log10 Scale)") +
+            ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
+            ggplot2::ggtitle(
+                "Probability of Photon Detection"
+            ) +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+                legend.position = "top",
+                legend.title = ggplot2::element_text(size=7),
+                legend.text = ggplot2::element_text(size=7),
+                strip.background = ggplot2::element_rect(
+                    fill = "white"
+                )
+            )
+    }
+
+    else if (fig_name == "prob_det_position") {
+        plt <-
+            summary_data |>
+            dplyr::mutate(y_cm = sqrt((y_cm ^ 2) + (179.5 ^2))) |>
+            ggplot2::ggplot(ggplot2::aes(
+                x = y_cm,
+                y = PrDet,
+                color = as.factor(Es_keV)
+            )) +
+            ggplot2::geom_point(size = 1) +
+            ggplot2::geom_line(linewidth = 0.5) +
+            ggplot2::facet_grid(
+                cols = ggplot2::vars(contents),
+                labeller = ggplot2::as_labeller(
+                    c("m"="Scrap Metal", "f"="Foodstuff")
+                )
+            ) +
+            ggplot2::scale_x_continuous(
+                trans = "log10",
+                limits = c(175, 1525),
+                n.breaks = 7
+            ) +
+            ggplot2::xlab("Distance (cm) (Log10 Scale)") +
+            ggplot2::scale_y_continuous(
+                trans = "log10",
+                limits = c(1e-9, 1e-1),
+                n.breaks = 10,
+                labels = scales::trans_format(
+                    "log10",
+                    scales::math_format(10^.x)
+                ),
+                expand = c(0,0)
+            ) +
+            ggplot2::scale_colour_viridis_d(
+                name = "Source Energy (keV): ",
+                breaks = c(
+                    200, 500, 1000, 1500, 2000
+                ),
+                labels = c(
+                    "200 ", "500 ", "1000", "1500", "2000"
+                ),
+                direction = -1,
+                option = color_style
+            ) +
+            ggplot2::ylab("Probability (Log10 Scale)") +
+            ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
+            ggplot2::ggtitle(
+                "Probability of Photon Detection"
+            ) +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+                legend.position = "top",
+                legend.title = ggplot2::element_text(size=7),
+                legend.text = ggplot2::element_text(size=7),
+                strip.background = ggplot2::element_rect(
+                    fill = "white"
+                )
+            )
+    }
+
+    else if (fig_name == "lm_diagnostics_dist") {
+        plt <-
+            linear_model |>
+            broom::augment() |>
+            ggplot2::ggplot() +
+            ggplot2::geom_histogram(
+                mapping = ggplot2::aes(
+                    x = .std.resid,
+                    y = ggplot2::after_stat(density)
+                ),
+                bins = btools::bin_number(
+                    broom::augment(linear_model)$.std.resid
+                ),
+                alpha = 0.2,
+                col = "black",
+                fill = "grey"
+            ) +
+            ggplot2::geom_line(
+                data = dplyr::mutate(
+                    data.frame(abscissa = -100:50 / 20),
+                    ordinate = dnorm(abscissa)),
+                mapping = ggplot2::aes(x = abscissa, y = ordinate)) +
+            ggplot2::xlab("Relative Residuals") +
+            ggplot2::scale_x_continuous(expand = c(0,0)) +
+            ggplot2::ylab("") +
+            ggplot2::scale_y_continuous(expand = c(0,0), limits = c(0,1)) +
+            ggplot2::ggtitle(
+                "Distribution of Residuals",
+                subtitle = "Line indicates standard normal distribution") +
+            ggplot2::theme_bw()
+
+    }
+
+    else if (fig_name == "lm_diagnostics_qq") {
+        plt <-
+            linear_model |>
+            broom::augment() |>
+            ggplot2::ggplot(ggplot2::aes(sample = .resid)) +
+            ggplot2::geom_qq() +
+            ggplot2::geom_qq_line() +
+            ggplot2::xlab("Quantiles of Standard Normal") +
+            ggplot2::ylab("Quantiles of Residuals") +
+            ggplot2::ggtitle(
+                "Quantile-Quantile Plot of Residuals",
+                subtitle = "Line indicates normal distribution") +
+            ggplot2::theme_bw()
+    }
+
+    else if (fig_name == "lm_diagnostics_fit_resid") {
+        plt <-
+            linear_model |>
+            broom::augment() |>
+            ggplot2::ggplot() +
+            ggplot2::geom_point(mapping = ggplot2::aes(
+                x = .fitted,
+                y = .resid,
+                color = trans_kev,
+                alpha = trans_cm
+            )) +
+            ggplot2::facet_grid(
+                rows = ggplot2::vars(contents),
+                labeller = ggplot2::as_labeller(c(
+                    "m"="Scrap Metal",
+                    "f"="Foodstuff"
+                ))
+            ) +
+            ggplot2::xlab("Fitted Values of Ln(Efficiency)") +
+            ggplot2::ylab("Residuals of Ln(Efficiency)") +
+            ggplot2::ggtitle("Residuals vs. Fitted Values of Linear Model") +
+            ggplot2::scale_color_continuous(
+                name = "Ln(Source\n\ \ \ Energy)"
+            ) +
+            ggplot2::scale_alpha_continuous(name = "Ln(Distance)") +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+                legend.position = "top",
+                legend.title = ggplot2::element_text(size=7),
+                legend.text = ggplot2::element_text(size=7),
+                strip.background = ggplot2::element_rect(fill = "white")
+            )
+    }
+
+    else if (fig_name == "lm_comparison") {
+        plt <-
+            summary_data |>
+            predict_efficiency(method = "lm") |>
+            ggplot2::ggplot() +
+            ggplot2::geom_line(
+                mapping = ggplot2::aes(
+                    x = Es_keV,
+                    y = efficiency,
+                    color = as.factor(y_cm)
+                ),
+                linewidth = 1
+            ) +
+            ggplot2::geom_point(
+                mapping = ggplot2::aes(
+                    x = Es_keV,
+                    y = PrDet,
+                    color = as.factor(y_cm)
+                ),
+                size = 1
+            ) +
+            ggplot2::facet_grid(
+                cols = ggplot2::vars(contents),
+                labeller = ggplot2::as_labeller(c(
+                    "m"="Scrap Metal",
+                    "f"="Foodstuff"
+                ))
+            ) +
+            ggplot2::scale_x_continuous(limits = c(0,2000)) +
+            ggplot2::xlab("Source Energy (keV)") +
+            ggplot2::scale_y_continuous(
+                trans = "log10",
+                limits = c(1e-9, 1e-1),
+                n.breaks = 10,
+                labels = scales::trans_format("log10", scales::math_format(10^.x))
+            ) +
+            ggplot2::ylab("Probability (Log10 Scale)") +
+            ggplot2::scale_colour_viridis_d(
+                name = "Distance (cm): ",
+                breaks = c(
+                    0, -250, -500, -750, -1000, -1250, -1500
+                ),
+                labels = c(
+                    "0     ", "250 ", "500 ", "750 ", "1000",
+                    "1250", "1500"
+                ),
+                direction = -1,
+                option = color_style
+            ) +
+            ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
+            ggplot2::ggtitle(
+                "Probability of Photon Detection",
+                subtitle = "Points denote MCNP values, lines denote fitted values.") +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+                legend.position = "top",
+                legend.title = ggplot2::element_text(size=7),
+                legend.text = ggplot2::element_text(size=7),
+                strip.background = ggplot2::element_rect(fill = "white")
+            )
+    }
+
+    else if (fig_name == "lm_contour") {
+        plt <-
+            rbind(
+                dplyr::mutate(data.frame(
+                    y_cm = rep(-50:50 * 10, times = 151),
+                    Es_keV = rep(50:200 * 10, each = 101)),
+                    contents = "m"
+                ),
+                dplyr::mutate(data.frame(
+                    y_cm = rep(-50:50 * 10, times = 151),
+                    Es_keV = rep(50:200 * 10, each = 101)),
+                    contents = "f"
+                )
+            ) |>
+            predict_efficiency(method = "lm") |>
+            ggplot2::ggplot(
+                ggplot2::aes(x = Es_keV, y = y_cm, z = 100*(efficiency))
+            ) +
+            ggplot2::facet_grid(
+                rows = ggplot2::vars(contents),
+                labeller = ggplot2::as_labeller(c(
+                    "m"="Scrap Metal",
+                    "f"="Foodstuff"
+                ))
+            ) +
+            ggplot2::geom_contour_filled(bins = 9) +
+            ggplot2::scale_fill_viridis_d(
+                name = "Efficiency (%)",
+                option = "F",
+                begin = 1,
+                end = 0) +
+            ggplot2::scale_x_continuous(expand = c(0,0)) +
+            ggplot2::xlab("Source Energy (keV)") +
+            ggplot2::scale_y_continuous(expand = c(0.,0.)) +
+            ggplot2::ylab("Truck Position (cm)") +
+            ggplot2::ggtitle(
+                "Detection Efficiency for Different\nSource Energies and Positions"
+            ) +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+                legend.position = "right",
+                legend.title = ggplot2::element_text(size=14),
+                legend.text = ggplot2::element_text(size=12),
+                strip.background = ggplot2::element_rect(fill = "white"),
+                panel.spacing = ggplot2::unit(1, "lines")
+            )
+    }
+
+    else if (fig_name == "lm_net_counts") {
+        stop("Not done yet")
+    }
+
+    else if (fig_name == "lm_derivative") {
+        stop("Not done yet")
+    }
+
+    else if (fig_name == "earth_explanation") {
+        stop("Not done yet")
+    }
+
+    else if (fig_name == "earth_diagnostics_dist") {
+        stop("Not done yet")
+    }
+
+    else if (fig_name == "earth_diagnostics_qq") {
+        stop("Not done yet")
+    }
+
+    else if (fig_name == "earth_diagnostics_fit_resid") {
+        stop("Not done yet")
+    }
+
+    else if (fig_name == "earth_comparison") {
+        stop("Not done yet")
+    }
+
+    else if (fig_name == "earth_contour") {
+        stop("Not done yet")
+    }
+
+    else {
+        stop(paste(
+            "Potential figures are:",
+            "interior_atten_coeff",
+            "star_differences",
+            "parity_differences",
+            "prob_reach",
+            "prob_det_energy",
+            "prob_det_position",
+            "lm_diagnostics_dist",
+            "lm_diagnostics_qq",
+            "lm_diagnostics_fit_resid",
+            "lm_comparison",
+            "lm_contour",
+            sep = "\n"
+        ))
+    }
+
+
+    return(plt)
+}
