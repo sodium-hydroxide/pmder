@@ -813,7 +813,44 @@ mcnp_output_processing <- function(
     }
     rm(i, subset_i)
     
-    out$summary_data <- summary_daty
+    out$summary_data <- summary_data
+
+
+    # Return everything
+    return(out)
+
+}
+
+a <- mcnp_output_processing("listOfInputs.txt", "data_raw/truckPtSource/")
+
+#star F2
+```
+
+
+# Intrinsic Creation
+
+# Linear Model
+
+```{r}
+# Construction of linear model ----
+
+
+# Save data ----
+save(linear_model,file = "data/linear_model.rda")
+save(linear_model_beta, file = "data/linear_model_beta.rda")
+save(count_rate_data_continuous, file = "data/count_rate_data_continuous.R")
+
+```
+
+# Earth Model
+
+
+```{r}
+
+save(earth_model, file = "data/earth_model.Rda")
+save(earth_model_aug, file = "data/earth_model_aug.Rda")
+```
+
 
     # Creation of linear model ----
 
@@ -913,39 +950,3 @@ mcnp_output_processing <- function(
         earth_model = earth_model,
         earth_model_aug = earth_model_aug
     )
-
-    # Return everything
-    return(out)
-
-}
-
-
-
-#star F2
-```
-
-
-# Intrinsic Creation
-
-# Linear Model
-
-```{r}
-# Construction of linear model ----
-
-
-# Save data ----
-save(linear_model,file = "data/linear_model.rda")
-save(linear_model_beta, file = "data/linear_model_beta.rda")
-save(count_rate_data_continuous, file = "data/count_rate_data_continuous.R")
-
-```
-
-# Earth Model
-
-
-```{r}
-
-save(earth_model, file = "data/earth_model.Rda")
-save(earth_model_aug, file = "data/earth_model_aug.Rda")
-```
-
