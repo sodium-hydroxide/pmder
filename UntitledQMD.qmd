@@ -11,7 +11,39 @@ load("~/DATA/projects/Research/r-packages/pmder/data/earth_model.Rda")
 ```{r}
 
 
-plt
+
+ggplot2::ggplot(data.frame(x = 1:10, y = 1:10), ggplot2::aes(x,y)) +
+    ggplot2::geom_line(color = "white") +
+    ggtikz::ggtikzAnnotation(paste(
+    "\\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt",
+    "\\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]",
+    "%uncomment if require: \\path (0,235); %set diagram left start at 0, and has height of 235",
+    "%Shape: Circle [id:dp7788878868008242]",
+    "\\draw   (285.5,121) .. controls (285.5,93.39) and (307.89,71) .. (335.5,71) .. controls (363.11,71) and (385.5,93.39) .. (385.5,121) .. controls (385.5,148.61) and (363.11,171) .. (335.5,171) .. controls (307.89,171) and (285.5,148.61) .. (285.5,121) -- cycle ;",
+    "%Shape: Circle [id:dp7625894053608299]",
+    "\\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (325.5,121) .. controls (325.5,118.24) and (327.74,116) .. (330.5,116) .. controls (333.26,116) and (335.5,118.24) .. (335.5,121) .. controls (335.5,123.76) and (333.26,126) .. (330.5,126) .. controls (327.74,126) and (325.5,123.76) .. (325.5,121) -- cycle ;",
+    "%Shape: Circle [id:dp38683269305123147]",
+    "\\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (330.5,126) .. controls (330.5,123.24) and (332.74,121) .. (335.5,121) .. controls (338.26,121) and (340.5,123.24) .. (340.5,126) .. controls (340.5,128.76) and (338.26,131) .. (335.5,131) .. controls (332.74,131) and (330.5,128.76) .. (330.5,126) -- cycle ;",
+    "%Shape: Circle [id:dp7471686518766322]",
+    "\\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (325.5,126) .. controls (325.5,123.24) and (327.74,121) .. (330.5,121) .. controls (333.26,121) and (335.5,123.24) .. (335.5,126) .. controls (335.5,128.76) and (333.26,131) .. (330.5,131) .. controls (327.74,131) and (325.5,128.76) .. (325.5,126) -- cycle ;",
+    "%Shape: Circle [id:dp6762224007667966]",
+    "\\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (335.5,121) .. controls (335.5,118.24) and (337.74,116) .. (340.5,116) .. controls (343.26,116) and (345.5,118.24) .. (345.5,121) .. controls (345.5,123.76) and (343.26,126) .. (340.5,126) .. controls (337.74,126) and (335.5,123.76) .. (335.5,121) -- cycle ;",
+    "%Shape: Circle [id:dp679883378964453]",
+    "\\draw  [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ,fill opacity=1 ] (330.5,116) .. controls (330.5,113.24) and (332.74,111) .. (335.5,111) .. controls (338.26,111) and (340.5,113.24) .. (340.5,116) .. controls (340.5,118.76) and (338.26,121) .. (335.5,121) .. controls (332.74,121) and (330.5,118.76) .. (330.5,116) -- cycle ;",
+    "%Curve Lines [id:da8475002827981385]",
+    "\\draw    (235,179.5) .. controls (274.6,149.8) and (295.09,199.98) .. (334.31,171.88) ;",
+    "\\draw [shift={(335.5,171)}, rotate = 143.13] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;",
+    "%Straight Lines [id:da06814611929926717]",
+    "\\draw    (335.5,171) -- (460.11,213.85) ;",
+    "\\draw [shift={(462,214.5)}, rotate = 198.98] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;",
+    "% Text Node",
+    "\\draw (220,169.4) node [anchor=north west][inner sep=0.75pt]    {$\\gamma $};",
+    "% Text Node",
+    "\\draw (467,201.4) node [anchor=north west][inner sep=0.75pt]    {$e^{-}$};",
+    "\\end{tikzpicture}",
+    sep = "\\n"
+), x = "data", y = "data", panelx = -1, panely = -1)
+
 
 ```
 
