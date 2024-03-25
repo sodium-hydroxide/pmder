@@ -108,9 +108,38 @@ tbl <- function(tbl_name) {
             "Atom", "Mass Fraction"
         )
     }
-   ./
 
-    else
+    else if (tbl_name == "all_materials") {
+        table <- data.frame(
+            cargo = c("Foodstuff", "", "Scrap Metal", ""),
+            material = c(
+                "Stainless Steel", "Dry Air", "ICRP Soft Tissue", "Dry Air"
+            ),
+            mass_fraction = c("99.66\%", "0.34\%", "99.88\%", "0.12\%"),
+            volume_fraction = c("4.30\%", "95.70\%", "50.00\%", "50.00\%"),
+        )
+        col_names <- c("Cargo", "Material", "Mass Fraction", "Volume Fraction")
+    }
+
+    else if (tbl_name == "photon_energies") {
+        table <- data.frame(
+            source = c(
+                "$^{137}\\mathrm{Cs}\ \\gamma-\\text{ray}$",
+                "$^{60}\\mathrm{Co}\ \\gamma-\\text{rays}$",
+                "Electron Annihilation Photons", "Range of Gamma-Emitters"
+            ),
+            energy = c(
+                "$661.7$",
+                "$\\begin{matrix}1173.2\\\\1332.5\\end{matrix}$",
+                "510.9",
+                "$\\begin{matrix}200\\,\\mathrm{keV}\\leq E_\\text{s}\\leq 2000\\,\\mathrm{keV}\\\\ \\Delta E_{s}=50\\,\\mathrm{keV}\\end{matrix}$"
+            ),
+            yield = c("$0.851$", "$0.998$", "$0.999$", "N/A")
+        )
+        col_names <- c(
+            "Source", "Energy (keV)", "Yield"
+        )
+    }
 
     else {
         stop(paste(
@@ -123,4 +152,3 @@ tbl <- function(tbl_name) {
 
     return(list(table = table, col_names = col_names))
 }
-
