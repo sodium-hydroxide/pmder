@@ -108,6 +108,7 @@ tbl <- function(tbl_name) {
             "Atom", "Mass Fraction"
         )
     }
+   ./
 
     else
 
