@@ -55,15 +55,15 @@ fig <- function(fig_name, color_style = "plasma") {
                     linetype = type
                 )
             ) +
-            ggplot2::xlab("Photon Energy (keV)") +
             ggplot2::scale_x_continuous(
+                name = "Photon Energy (keV)",
                 transform = "log10",
                 limits = c(1,2150),
                 expand = c(0,0),
                 n.breaks = 15
             ) +
-            ggplot2::ylab("Interaction Coefficient (1/cm)") +
             ggplot2::scale_y_continuous(
+                name = "Interaction Coefficient (1/cm)",
                 transform = "log10",
                 limits = c(1e-2,1e4),
                 expand = c(0,0),
@@ -194,6 +194,7 @@ fig <- function(fig_name, color_style = "plasma") {
                 )
             ) +
             ggplot2::scale_x_continuous(
+                name = "Energy (keV)",
                 trans = "log10",
                 limits = c(1,2000),
                 expand = c(0,0),
@@ -202,8 +203,8 @@ fig <- function(fig_name, color_style = "plasma") {
                     scales::math_format(10^.x)
                 )
             ) +
-            ggplot2::xlab("Energy (keV)") +
             ggplot2::scale_y_continuous(
+                name = "Attenuation Coefficienty (1 / cm)",
                 trans = "log10",
                 limits = c(1e-2, 1e5),
                 n.breaks = 10,
@@ -212,7 +213,6 @@ fig <- function(fig_name, color_style = "plasma") {
                     scales::math_format(10^.x)
                 )
             ) +
-            ggplot2::ylab("Attenuation Coefficienty (1 / cm)") +
             ggplot2::ggtitle("Attenuation Coefficients of Truck Cargo") +
             ggplot2::theme_bw() +
             ggplot2::theme(
@@ -267,8 +267,6 @@ fig <- function(fig_name, color_style = "plasma") {
 
             return(bit64::integer64(historiesRequired))
         })
-
-
 
         plt <-
             data.frame(
@@ -385,12 +383,14 @@ fig <- function(fig_name, color_style = "plasma") {
                 binwidth = 0.01,
                 na.rm = TRUE
             ) +
-            ggplot2::xlab("Relative Difference") +
             ggplot2::scale_x_continuous(
+                name = "Relative Difference",
                 limits = c(0,0.5), expand = c(0,0)
             ) +
-            ggplot2::ylab(NULL) +
-            ggplot2::scale_y_continuous(expand = c(0,0)) +
+            ggplot2::scale_y_continuous(
+                name = NULL,
+                expand = c(0,0)
+            ) +
             ggplot2::ggtitle(
                 "Distribution of Differences",
                 subtitle = "Particle and Radiant Energy Tallies"
@@ -426,10 +426,14 @@ fig <- function(fig_name, color_style = "plasma") {
             ggplot2::geom_histogram(
                 binwidth = 0.01, na.rm = TRUE
             ) +
-            ggplot2::xlab("Relative Difference") +
-            ggplot2::scale_x_continuous(limits = c(-2,2), expand = c(0,0)) +
-            ggplot2::ylab(NULL) +
-            ggplot2::scale_y_continuous(expand = c(0,0)) +
+            ggplot2::scale_x_continuous(
+                name = "Relative Difference",
+                limits = c(-2,2), expand = c(0,0)
+            ) +
+            ggplot2::scale_y_continuous(
+                name = NULL,
+                expand = c(0,0)
+            ) +
             ggplot2::ggtitle("Differences between Left and Right Tallies") +
             ggplot2::theme_bw()
     }
@@ -459,11 +463,12 @@ fig <- function(fig_name, color_style = "plasma") {
                 )
             ) +
             ggplot2::scale_x_continuous(
+                name = "Source Energy (keV)",
                 limits = c(0,2090),
                 expand = c(0,0)
             ) +
-            ggplot2::xlab("Source Energy (keV)") +
             ggplot2::scale_y_continuous(
+                name = "Probability (Log10 Scale)",
                 trans = "log10",
                 limits = c(1e-9, 1e-1),
                 n.breaks = 10,
@@ -484,7 +489,6 @@ fig <- function(fig_name, color_style = "plasma") {
                 direction = -1,
                 option = color_style
             ) +
-            ggplot2::ylab("Probability (Log10 Scale)") +
             ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
             ggplot2::ggtitle(
                 "Probability of Photon Reaching Detector"
@@ -524,11 +528,12 @@ fig <- function(fig_name, color_style = "plasma") {
                 )
             ) +
             ggplot2::scale_x_continuous(
+                name = "Source Energy (keV)",
                 limits = c(0,2090),
                 expand = c(0,0)
             ) +
-            ggplot2::xlab("Source Energy (keV)") +
             ggplot2::scale_y_continuous(
+                name = "Probability (Log10 Scale)",
                 trans = "log10",
                 limits = c(1e-9, 1e-1),
                 n.breaks = 10,
@@ -549,7 +554,6 @@ fig <- function(fig_name, color_style = "plasma") {
                 direction = -1,
                 option = color_style
             ) +
-            ggplot2::ylab("Probability (Log10 Scale)") +
             ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
             ggplot2::ggtitle(
                 "Probability of Photon Detection"
@@ -590,12 +594,13 @@ fig <- function(fig_name, color_style = "plasma") {
                 )
             ) +
             ggplot2::scale_x_continuous(
+                name = "Distance (cm) (Log10 Scale)",
                 trans = "log10",
                 limits = c(175, 1525),
                 n.breaks = 7
             ) +
-            ggplot2::xlab("Distance (cm) (Log10 Scale)") +
             ggplot2::scale_y_continuous(
+                name = "Probability (Log10 Scale)",
                 trans = "log10",
                 limits = c(1e-9, 1e-1),
                 n.breaks = 10,
@@ -616,7 +621,6 @@ fig <- function(fig_name, color_style = "plasma") {
                 direction = -1,
                 option = color_style
             ) +
-            ggplot2::ylab("Probability (Log10 Scale)") +
             ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
             ggplot2::ggtitle(
                 "Probability of Photon Detection"
