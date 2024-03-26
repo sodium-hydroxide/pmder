@@ -9,6 +9,90 @@
 #' @examples fig("") will return a list of potential figures
 fig <- function(fig_name, color_style = "plasma") {
 
+    if (fig_name == "pvt_atten_coeff") {
+        plt <-
+            data.frame(
+                E_MeV = c(
+                    1.0E-03, 1.5E-03, 2.0E-03, 3.0E-03, 4.0E-03, 5.0E-03, 6.0E-03,
+                    8.0E-03, 1.0E-02, 1.5E-02, 2.0E-02, 3.0E-02, 4.0E-02, 5.0E-02,
+                    6.0E-02, 8.0E-02, 1.0E-01, 1.5E-01, 2.0E-01, 3.0E-01, 4.0E-01,
+                    5.0E-01, 6.0E-01, 8.0E-01, 1.0E+00, 1.2E+00, 1.5E+00, 2.0E+00,
+                    3.0E+00, 4.0E+00, 5.0E+00, 6.0E+00, 8.0E+00, 1.0E+01, 1.5E+01,
+                    2.0E+01),
+                mum = c(
+                    2.024E+03, 6.409E+02, 2.770E+02, 8.270E+01, 3.461E+01, 1.753E+01,
+                    1.005E+01, 4.220E+00, 2.204E+00, 7.705E-01, 4.358E-01, 2.647E-01,
+                    2.194E-01, 1.997E-01, 1.881E-01, 1.736E-01, 1.635E-01, 1.458E-01,
+                    1.331E-01, 1.155E-01, 1.034E-01, 9.443E-02, 8.732E-02, 7.668E-02,
+                    6.894E-02, 6.166E-02, 5.611E-02, 4.810E-02, 3.848E-02, 3.282E-02,
+                    2.907E-02, 2.641E-02, 2.290E-02, 2.069E-02, 1.770E-02, 1.624E-02),
+                muenm = c(
+                    2.022E+03, 6.397E+02, 2.760E+02, 8.203E+01, 3.407E+01, 1.707E+01,
+                    9.650E+00, 3.883E+00, 1.903E+00, 5.158E-01, 2.059E-01, 6.210E-02,
+                    3.256E-02, 2.424E-02, 2.180E-02, 2.172E-02, 2.310E-02, 2.650E-02,
+                    2.876E-02, 3.110E-02, 3.197E-02, 3.218E-02, 3.204E-02, 3.128E-02,
+                    3.027E-02, 2.894E-02, 2.766E-02, 2.542E-02, 2.214E-02, 1.992E-02,
+                    1.835E-02, 1.718E-02, 1.558E-02, 1.455E-02, 1.309E-02, 1.236E-02)
+            ) |>
+            dplyr::mutate(
+                E_keV = E_MeV * 1000,
+                mu = mum * 2.250000,
+                muen = muenm * 2.250000
+            ) |>
+            dplyr::filter(E_keV <= 2000) |>
+            dplyr::select(-mum,-muenm, -E_MeV) |>
+            tidyr::pivot_longer(
+                cols = c("mu", "muen"),
+                names_to = "type",
+                values_to = "mu"
+            ) |>
+            dplyr::mutate(type = as.factor(type)) |>
+            ggplot2::ggplot() +
+            ggplot2::geom_line(
+                mapping = ggplot2::aes(
+                    x = E_keV,
+                    y = mu,
+                    linetype = type
+                )
+            ) +
+            ggplot2::scale_x_continuous(
+                name = "Photon Energy (keV)",
+                transform = "log10",
+                limits = c(1,2150),
+                expand = c(0,0),
+                n.breaks = 15
+            ) +
+            ggplot2::scale_y_continuous(
+                name = "Interaction Coefficient (1/cm)",
+                transform = "log10",
+                limits = c(1e-2,1e4),
+                expand = c(0,0),
+                n.breaks = 7,
+                labels = scales::trans_format(
+                    "log10",
+                    scales::math_format(10^.x)
+                )
+            ) +
+            ggplot2::scale_linetype_discrete(
+                name = "",
+                breaks = c("mu", "muen"),
+                labels = c(
+                    "Linear Attenuation Coefficient",
+                    "Energy Absorption Coefficient"
+                )
+            ) +
+            ggplot2::ggtitle(
+                "Interaction Coefficients in PVT"
+            ) +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+                legend.position = "bottom",
+                strip.background = ggplot2::element_rect(
+                    fill = "white"
+                )
+            )
+    }
+
     if (fig_name == "interior_atten_coeff") {
         plt <-
             data.frame(
@@ -110,6 +194,7 @@ fig <- function(fig_name, color_style = "plasma") {
                 )
             ) +
             ggplot2::scale_x_continuous(
+                name = "Energy (keV)",
                 trans = "log10",
                 limits = c(1,2000),
                 expand = c(0,0),
@@ -118,8 +203,8 @@ fig <- function(fig_name, color_style = "plasma") {
                     scales::math_format(10^.x)
                 )
             ) +
-            ggplot2::xlab("Energy (keV)") +
             ggplot2::scale_y_continuous(
+                name = "Attenuation Coefficienty (1 / cm)",
                 trans = "log10",
                 limits = c(1e-2, 1e5),
                 n.breaks = 10,
@@ -128,11 +213,104 @@ fig <- function(fig_name, color_style = "plasma") {
                     scales::math_format(10^.x)
                 )
             ) +
-            ggplot2::ylab("Attenuation Coefficienty (1 / cm)") +
             ggplot2::ggtitle("Attenuation Coefficients of Truck Cargo") +
             ggplot2::theme_bw() +
             ggplot2::theme(
                 legend.position = "bottom",
+                strip.background = ggplot2::element_rect(
+                    fill = "white"
+                )
+            )
+    }
+
+    if (fig_name == "histories_needed") {
+        history_number <- Vectorize(function(
+        energy,
+        truckPosition) {
+
+            if (abs(truckPosition) < 300) {
+                if ((energy < 0.5) | (energy > 1.3)) {
+                    historiesRequired <- 1e8
+                }
+                else {
+                    historiesRequired <- 4e8
+                }
+            }
+            else if (abs(truckPosition) < 800) {
+                if (energy < 0.6) {
+                    historiesRequired <- 1e9
+                }
+                else {
+                    historiesRequired <- 1e8
+                }
+            }
+            else if(abs(truckPosition) < 1300) {
+                if (energy < 0.6) {
+                    historiesRequired <- 3e9
+                }
+                else if (energy < 1.2) {
+                    historiesRequired <- 3e8
+                }
+                else {
+                    historiesRequired <- 1e8
+                }
+            }
+            else {
+                if (energy < 1.0) {
+                    historiesRequired <- 2.5e9
+                }
+                else {
+                    historiesRequired <- 3e9
+                }
+            }
+            return(historiesRequired)
+
+            return(bit64::integer64(historiesRequired))
+        })
+
+        plt <-
+            data.frame(
+                energy = rep(10:2000,times = 4),
+                position = rep(c(0,500, 1000, 1500), each = 1991),
+                type = as.factor(rep(
+                    c(
+                        "0 cm ≤ |y| < 300 cm",
+                        "300 cm ≤ |y| < 800 cm",
+                        "800 cm ≤ |y| < 1300 cm",
+                        "1300 cm ≤ |y| < 2000 cm"
+                    ),
+                    each = 1991
+                ))
+            ) |>
+            dplyr::mutate(
+                number = history_number(energy / 1000, position)
+            ) |>
+            ggplot2::ggplot() +
+            ggplot2::geom_line(
+                mapping = ggplot2::aes(
+                    x = energy,
+                    y = number
+                )
+            ) +
+            ggplot2::facet_wrap(
+                ~ type, nrow = 2
+            ) +
+            ggplot2::scale_x_continuous(
+                name = "Energy (keV)",
+                limits = c(1,2090),
+                expand = c(0,0)
+            ) +
+            ggplot2::scale_y_continuous(
+                name = "Histories Needed",
+                transform = "log10",
+                limits = c(5e7, 5e9),
+                expand = c(0,0),
+                n.breaks = 5,
+                labels = btools::scientific_label
+            ) +
+            ggplot2::ggtitle("Particle Histories Needed for MCNP") +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
                 strip.background = ggplot2::element_rect(
                     fill = "white"
                 )
@@ -205,12 +383,14 @@ fig <- function(fig_name, color_style = "plasma") {
                 binwidth = 0.01,
                 na.rm = TRUE
             ) +
-            ggplot2::xlab("Relative Difference") +
             ggplot2::scale_x_continuous(
+                name = "Relative Difference",
                 limits = c(0,0.5), expand = c(0,0)
             ) +
-            ggplot2::ylab(NULL) +
-            ggplot2::scale_y_continuous(expand = c(0,0)) +
+            ggplot2::scale_y_continuous(
+                name = NULL,
+                expand = c(0,0)
+            ) +
             ggplot2::ggtitle(
                 "Distribution of Differences",
                 subtitle = "Particle and Radiant Energy Tallies"
@@ -246,10 +426,14 @@ fig <- function(fig_name, color_style = "plasma") {
             ggplot2::geom_histogram(
                 binwidth = 0.01, na.rm = TRUE
             ) +
-            ggplot2::xlab("Relative Difference") +
-            ggplot2::scale_x_continuous(limits = c(-2,2), expand = c(0,0)) +
-            ggplot2::ylab(NULL) +
-            ggplot2::scale_y_continuous(expand = c(0,0)) +
+            ggplot2::scale_x_continuous(
+                name = "Relative Difference",
+                limits = c(-2,2), expand = c(0,0)
+            ) +
+            ggplot2::scale_y_continuous(
+                name = NULL,
+                expand = c(0,0)
+            ) +
             ggplot2::ggtitle("Differences between Left and Right Tallies") +
             ggplot2::theme_bw()
     }
@@ -265,6 +449,13 @@ fig <- function(fig_name, color_style = "plasma") {
             )) +
             ggplot2::geom_point(size = 1) +
             ggplot2::geom_line(linewidth = 0.5) +
+            ggplot2::geom_errorbar(
+                mapping = ggplot2::aes(
+                    ymin = PrReach - uPrReach,
+                    ymax = PrReach + uPrReach
+                ),
+                width = 20
+            ) +
             ggplot2::facet_grid(
                 cols = ggplot2::vars(contents),
                 labeller = ggplot2::as_labeller(
@@ -272,11 +463,12 @@ fig <- function(fig_name, color_style = "plasma") {
                 )
             ) +
             ggplot2::scale_x_continuous(
+                name = "Source Energy (keV)",
                 limits = c(0,2090),
                 expand = c(0,0)
             ) +
-            ggplot2::xlab("Source Energy (keV)") +
             ggplot2::scale_y_continuous(
+                name = "Probability (Log10 Scale)",
                 trans = "log10",
                 limits = c(1e-9, 1e-1),
                 n.breaks = 10,
@@ -297,7 +489,6 @@ fig <- function(fig_name, color_style = "plasma") {
                 direction = -1,
                 option = color_style
             ) +
-            ggplot2::ylab("Probability (Log10 Scale)") +
             ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
             ggplot2::ggtitle(
                 "Probability of Photon Reaching Detector"
@@ -323,6 +514,13 @@ fig <- function(fig_name, color_style = "plasma") {
             )) +
             ggplot2::geom_point(size = 1) +
             ggplot2::geom_line(linewidth = 0.5) +
+            ggplot2::geom_errorbar(
+                mapping = ggplot2::aes(
+                    ymin = PrDet - uPrDet,
+                    ymax = PrDet + uPrDet
+                ),
+                width = 20
+            ) +
             ggplot2::facet_grid(
                 cols = ggplot2::vars(contents),
                 labeller = ggplot2::as_labeller(
@@ -330,11 +528,12 @@ fig <- function(fig_name, color_style = "plasma") {
                 )
             ) +
             ggplot2::scale_x_continuous(
+                name = "Source Energy (keV)",
                 limits = c(0,2090),
                 expand = c(0,0)
             ) +
-            ggplot2::xlab("Source Energy (keV)") +
             ggplot2::scale_y_continuous(
+                name = "Probability (Log10 Scale)",
                 trans = "log10",
                 limits = c(1e-9, 1e-1),
                 n.breaks = 10,
@@ -355,7 +554,6 @@ fig <- function(fig_name, color_style = "plasma") {
                 direction = -1,
                 option = color_style
             ) +
-            ggplot2::ylab("Probability (Log10 Scale)") +
             ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
             ggplot2::ggtitle(
                 "Probability of Photon Detection"
@@ -382,6 +580,13 @@ fig <- function(fig_name, color_style = "plasma") {
             )) +
             ggplot2::geom_point(size = 1) +
             ggplot2::geom_line(linewidth = 0.5) +
+            ggplot2::geom_errorbar(
+                mapping = ggplot2::aes(
+                    ymin = PrDet - uPrDet,
+                    ymax = PrDet + uPrDet
+                ),
+                width = 150
+            ) +
             ggplot2::facet_grid(
                 cols = ggplot2::vars(contents),
                 labeller = ggplot2::as_labeller(
@@ -389,12 +594,13 @@ fig <- function(fig_name, color_style = "plasma") {
                 )
             ) +
             ggplot2::scale_x_continuous(
+                name = "Distance (cm) (Log10 Scale)",
                 trans = "log10",
                 limits = c(175, 1525),
                 n.breaks = 7
             ) +
-            ggplot2::xlab("Distance (cm) (Log10 Scale)") +
             ggplot2::scale_y_continuous(
+                name = "Probability (Log10 Scale)",
                 trans = "log10",
                 limits = c(1e-9, 1e-1),
                 n.breaks = 10,
@@ -415,7 +621,6 @@ fig <- function(fig_name, color_style = "plasma") {
                 direction = -1,
                 option = color_style
             ) +
-            ggplot2::ylab("Probability (Log10 Scale)") +
             ggplot2::guides(color = ggplot2::guide_legend(nrow = 1)) +
             ggplot2::ggtitle(
                 "Probability of Photon Detection"
@@ -658,7 +863,9 @@ fig <- function(fig_name, color_style = "plasma") {
     else {
         stop(paste(
             "Potential figures are:",
+            "pvt_atten_coeff",
             "interior_atten_coeff",
+            "histories_needed",
             "star_differences",
             "parity_differences",
             "prob_reach",
@@ -676,3 +883,5 @@ fig <- function(fig_name, color_style = "plasma") {
 
     return(plt)
 }
+
+
