@@ -15,6 +15,12 @@ predict_efficiency <- function(
         input_data,
         method = "earth") {
 
+    # Global Variables ----
+    y_cm <- NULL
+    Es_keV <- NULL
+
+    # Function ----
+
     if (F %in% (c("Es_keV", "y_cm", "contents") %in% names(input_data))) {
         return("Error! Dataframe must contain columns: Es_keV, d_cm, contents")
     }
@@ -144,11 +150,11 @@ predict_efficiency <- function(
         input_data$pos <- input_data$y_cm
         input_data$y_cm <- abs(input_data$y_cm)
 
-        earth_output <- predict(
+        earth_output <- stats::predict(
             earth_model,
             input_data,
             interval = "pint",
-            level = 2 * pnorm(1) - 1)
+            level = 2 * stats::pnorm(1) - 1)
 
         input_data$y_cm <- input_data$pos
         input_data$pos <- NULL

@@ -15,6 +15,6 @@ fig(fig_name, color_style = "plasma")
 Return figures used for pmder data visualization
 }
 \examples{
-fig("prob_det_energy") will return the efficiency as a function of the energy
-fig("") will return a list of potential figures
+#fig("prob_det_energy")  # will return the efficiency as a function of the energy
+#fig("") # will return a list of potential figures
 }

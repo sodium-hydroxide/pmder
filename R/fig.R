@@ -5,9 +5,73 @@
 #'
 #' @export
 #'
-#' @examples fig("prob_det_energy") will return the efficiency as a function of the energy
-#' @examples fig("") will return a list of potential figures
+#' @examples #fig("prob_det_energy")  # will return the efficiency as a function of the energy
+#' @examples #fig("") # will return a list of potential figures
 fig <- function(fig_name, color_style = "plasma") {
+
+    # Appeasing CRAN ----
+    E_MeV <- NULL
+    mum <- NULL
+    muenm <- NULL
+    E_keV <- NULL
+    type <- NULL
+    mu <- NULL
+    .x <- NULL
+    mu_cm <- NULL
+    Material <- NULL
+    energy <- NULL
+    position <- NULL
+    number <- NULL
+    Ed_keV <- NULL
+    LF1 <- NULL
+    LsF1 <- NULL
+    LF2 <- NULL
+    LsF2 <- NULL
+    LF4 <- NULL
+    LsF4 <- NULL
+    LF8 <- NULL
+    LsF8 <- NULL
+    RF1 <- NULL
+    RsF1 <- NULL
+    RF2 <- NULL
+    RsF2 <- NULL
+    RF4 <- NULL
+    RsF4 <- NULL
+    RF8 <- NULL
+    RsF8 <- NULL
+    sLF1 <- NULL
+    sLF2 <- NULL
+    sLF4 <- NULL
+    sLF8 <- NULL
+    sRF1 <- NULL
+    sRF2 <- NULL
+    sRF4 <- NULL
+    sRF8 <- NULL
+    RelativeDifference <- NULL
+    density <- NULL
+    Es_keV <- NULL
+    PrReach <- NULL
+    y_cm <- NULL
+    uPrReach <- NULL
+    contents <- NULL
+    PrDet <- NULL
+    uPrDet <- NULL
+    .std.resid <- NULL
+    abscissa <- NULL
+    ordinate <- NULL
+    .resid <- NULL
+    .fitted <- NULL
+    trans_kev <- NULL
+    trans_cm <- NULL
+    efficiency <- NULL
+    y_m <- NULL
+    count_rate_derivative <- NULL
+    count_rate <- NULL
+    log_deriv <- NULL
+
+
+
+    # Function ----
 
     if (fig_name == "pvt_atten_coeff") {
         plt <-
@@ -93,7 +157,7 @@ fig <- function(fig_name, color_style = "plasma") {
             )
     }
 
-    if (fig_name == "interior_atten_coeff") {
+    else if (fig_name == "interior_atten_coeff") {
         plt <-
             data.frame(
                 E_MeV = c(
@@ -223,7 +287,7 @@ fig <- function(fig_name, color_style = "plasma") {
             )
     }
 
-    if (fig_name == "histories_needed") {
+    else if (fig_name == "histories_needed") {
         history_number <- Vectorize(function(
         energy,
         truckPosition) {
@@ -274,10 +338,10 @@ fig <- function(fig_name, color_style = "plasma") {
                 position = rep(c(0,500, 1000, 1500), each = 1991),
                 type = as.factor(rep(
                     c(
-                        "0 cm ≤ |y| < 300 cm",
-                        "300 cm ≤ |y| < 800 cm",
-                        "800 cm ≤ |y| < 1300 cm",
-                        "1300 cm ≤ |y| < 2000 cm"
+                        "0 cm \u2264 |y| < 300 cm",
+                        "300 cm \u2264 |y| < 800 cm",
+                        "800 cm \u2264 |y| < 1300 cm",
+                        "1300 cm \u2264 |y| < 2000 cm"
                     ),
                     each = 1991
                 ))
@@ -656,7 +720,7 @@ fig <- function(fig_name, color_style = "plasma") {
             ggplot2::geom_line(
                 data = dplyr::mutate(
                     data.frame(abscissa = -100:50 / 20),
-                    ordinate = dnorm(abscissa)),
+                    ordinate = stats::dnorm(abscissa)),
                 mapping = ggplot2::aes(x = abscissa, y = ordinate)) +
             ggplot2::xlab("Relative Residuals") +
             ggplot2::scale_x_continuous(expand = c(0,0)) +
@@ -1047,6 +1111,12 @@ fig <- function(fig_name, color_style = "plasma") {
             "lm_contour",
             "lm_derivative",
             "lm_log_derivative",
+            "earth_explanation",
+            "earth_diagnostics_dist",
+            "earth_diagnostics_qq",
+            "earth_diagnostics_fit_resid",
+            "earth_comparison",
+            "earth_contour",
             sep = "\n"
         ))
     }
