@@ -36,7 +36,7 @@ mcnp_input_creation <- function(
             else {histories_required <- 1e8}
         }
         else {
-            if (energy < 1000) {histories_required <- 2.5e9}
+            if (energy_keV < 1000) {histories_required <- 2.5e9}
             else {histories_required <- 3e9}
         }
 
@@ -324,7 +324,7 @@ mcnp_input_creation <- function(
 
         # Terminal Command ----
         terminal_command <- paste(
-            "mpirun --use-hwthread-cpus /home/dbo/MY_MCNP/MCNP_truckPtSource/MCNP620/bin/mcnp6.mpi i=in_",
+            "mpirun --use-hwthread-cpus /home/dbo/MY_MCNP/MCNP_CODE/MCNP620/bin/mcnp6.mpi i=in_",
             file_name,
             ".mcnp o=out_",
             file_name,
@@ -347,7 +347,7 @@ mcnp_input_creation <- function(
 
 
     # Basic Initialization ----
-    directory <- paste("run", Sys.Date(), sep = "")
+    directory <- paste("run", Sys.time(), sep = "_")
     dir.create(directory)
 
     number_of_runs <- prod(
