@@ -141,11 +141,17 @@ predict_efficiency <- function(
 
     else if (method == "earth") {
 
+        input_data$pos <- input_data$y_cm
+        input_data$y_cm <- abs(input_data$y_cm)
+
         earth_output <- predict(
             earth_model,
             input_data,
             interval = "pint",
             level = 2 * pnorm(1) - 1)
+
+        input_data$y_cm <- input_data$pos
+        input_data$pos <- NULL
 
         input_data$efficiency <- exp(earth_output$fit)
 
