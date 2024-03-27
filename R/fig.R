@@ -869,7 +869,7 @@ fig <- function(fig_name, color_style = "plasma") {
                     ),
                     source = "Co-60"
                 ),
-                mutate(
+                dplyr::mutate(
                     predict_count_rate(
                         data.frame(
                             y_cm = rep(
