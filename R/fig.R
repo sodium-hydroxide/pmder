@@ -833,7 +833,135 @@ fig <- function(fig_name, color_style = "plasma") {
     }
 
     else if (fig_name == "lm_derivative") {
-        stop("Not done yet")
+        plt <-
+            rbind(
+                dplyr::mutate(
+                    predict_count_rate(
+                        data.frame(
+                            y_cm = rep(
+                                pracma::linspace(-300, 300, n = 1000),
+                                times = 2
+                            ),
+                            contents = rep(c("m","f"), each = 1000)
+                        ),
+                        photon_energy_keV = 661.66,
+                        yield = 0.851,
+                        speed_cm_s = 447,
+                        count_rate_derivative = TRUE,
+                        method = "lm"
+                    ),
+                    source = "Cs-137"
+                ),
+                dplyr::mutate(
+                    predict_count_rate(
+                        data.frame(
+                            y_cm = rep(
+                                pracma::linspace(-300, 300, n = 1000),
+                                times = 2
+                            ),
+                            contents = rep(c("m","f"), each = 1000)
+                        ),
+                        photon_energy_keV = c(1173, 1332),
+                        yield = c(0.998, 0.999),
+                        speed_cm_s = 447,
+                        count_rate_derivative = TRUE,
+                        method = "lm"
+                    ),
+                    source = "Co-60"
+                ),
+                mutate(
+                    predict_count_rate(
+                        data.frame(
+                            y_cm = rep(
+                                pracma::linspace(-300, 300, n = 1000),
+                                times = 2
+                            ),
+                            contents = rep(c("m","f"), each = 1000)
+                        ),
+                        photon_energy_keV = 510.9,
+                        yield = 2,
+                        speed_cm_s = 447,
+                        count_rate_derivative = TRUE,
+                        method = "lm"
+                    ),
+                    source = "Beta-Plus"
+                )
+            ) |>
+            dplyr::mutate(
+                source = as.factor(source),
+                y_m = y_cm / 100
+            ) |>
+            ggplot2::ggplot() +
+            ggplot2::geom_line(mapping = ggplot2::aes(
+                x = y_m,
+                y = count_rate_derivative,
+                linetype = source)) +
+            ggplot2::facet_grid(
+                cols = ggplot2::vars(contents),
+                labeller = ggplot2::as_labeller(c(
+                    "m"="Scrap Metal",
+                    "f"="Foodstuff"
+                ))
+            ) +
+            ggplot2::scale_linetype_discrete(name = "Source") +
+            ggplot2::scale_x_continuous(
+                name = "Distance (m)",
+                limits = c(-3,3.1),
+                expand = c(0,0)
+            ) +
+            ggplot2::scale_y_continuous(
+                name = "dr/dt (cps/s/Bq)",
+                limits = c(-0.06,0.06),
+                expand = c(0,0)
+            ) +
+            ggplot2::ggtitle(
+                "Time Derivative of Count Rate Along Trajectory"
+            ) +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+                strip.background = ggplot2::element_rect(fill = "white")
+            )
+    }
+
+    else if (fig_name == "lm_log_derivative") {
+        plt <-
+            predict_count_rate(
+                data.frame(
+                    y_cm = pracma::linspace(-300, 300, n = 1000),
+                    contents = rep("m", each = 1000)
+                ),
+                photon_energy_keV = 661.66,
+                yield = 0.851,
+                speed_cm_s = 447,
+                count_rate_derivative = TRUE,
+                method = "lm"
+            ) |>
+            dplyr::mutate(
+                y_m = y_cm / 100,
+                log_deriv = count_rate_derivative / count_rate
+            ) |>
+            ggplot2::ggplot() +
+            ggplot2::geom_line(mapping = ggplot2::aes(
+                x = y_m,
+                y = log_deriv
+            )) +
+            ggplot2::scale_x_continuous(
+                name = "Distance (m)",
+                limits = c(-3,3.1),
+                expand = c(0,0)
+            ) +
+            ggplot2::scale_y_continuous(
+                name = "d ln(r)/dt (1/s)",
+                limits = c(-6,6),
+                expand = c(0,0)
+            ) +
+            ggplot2::ggtitle(
+                "Logarithmic Time Derivative of Count Rate Along Trajectory"
+            ) +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+                strip.background = ggplot2::element_rect(fill = "white")
+            )
     }
 
     else if (fig_name == "earth_explanation") {
@@ -857,7 +985,48 @@ fig <- function(fig_name, color_style = "plasma") {
     }
 
     else if (fig_name == "earth_contour") {
-        stop("Not done yet")
+        plt <-
+            rbind(
+                dplyr::mutate(data.frame(
+                    y_cm = rep(-50:50 * 10, times = 151),
+                    Es_keV = rep(50:200 * 10, each = 101)), contents = "m"),
+                dplyr::mutate(data.frame(
+                    y_cm = rep(-50:50 * 10, times = 151),
+                    Es_keV = rep(50:200 * 10, each = 101)), contents = "f")
+            ) |>
+            predict_efficiency(method = "earth") |>
+            ggplot2::ggplot(
+                ggplot2::aes(x = Es_keV, y = y_cm, z = 100*(efficiency))
+            ) +
+            ggplot2::facet_grid(
+                rows = ggplot2::vars(contents),
+                labeller = ggplot2::as_labeller(c(
+                    "m"="Scrap Metal",
+                    "f"="Foodstuff"
+                ))
+            ) +
+            ggplot2::geom_contour_filled(bins = 7) +
+            ggplot2::scale_fill_viridis_d(
+                name = "Efficiency (%)",
+                option = "F",
+                begin = 1,
+                end = 0) +
+            ggplot2::scale_x_continuous(
+                name = "Source Energy (keV)", expand = c(0,0)
+            ) +
+            ggplot2::scale_y_continuous(
+                name = "Truck Position (cm)", expand = c(0.,0.)
+            ) +
+            ggplot2::ggtitle(
+                "Detection Efficiency for Different\nSource Energies and Positions") +
+            ggplot2::theme_bw() +
+            ggplot2::theme(
+                legend.position = "right",
+                legend.title = ggplot2::element_text(size=14),
+                legend.text = ggplot2::element_text(size=12),
+                strip.background = ggplot2::element_rect(fill = "white"),
+                panel.spacing = ggplot2::unit(1, "lines")
+            )
     }
 
     else {
@@ -876,6 +1045,8 @@ fig <- function(fig_name, color_style = "plasma") {
             "lm_diagnostics_fit_resid",
             "lm_comparison",
             "lm_contour",
+            "lm_derivative",
+            "lm_log_derivative",
             sep = "\n"
         ))
     }
@@ -883,5 +1054,3 @@ fig <- function(fig_name, color_style = "plasma") {
 
     return(plt)
 }
-
-
