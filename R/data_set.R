@@ -4,6 +4,7 @@
 #' @docType data
 #' @author Noah J. Blair \email{noahjblair@@outlook.com}
 #' @keywords data
+#' @export
 NULL
 
 #' Summary Data
@@ -12,6 +13,7 @@ NULL
 #' @docType data
 #' @author Noah J. Blair \email{noahjblair@@outlook.com}
 #' @keywords data
+#' @export
 NULL
 
 #' Linear Regression Model
@@ -20,4 +22,16 @@ NULL
 #' @docType data
 #' @author Noah J. Blair \email{noahjblair@@outlook.com}
 #' @keywords data
+#' @export
 NULL
+
+#' MARS Regression Model
+#'
+#' @name mars_model
+#' @docType data
+#' @author Noah J. Blair \email{noahjblair@@outlook.com}
+#' @keywords data
+#' @export
+NULL
+
+
