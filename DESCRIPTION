@@ -12,7 +12,12 @@ LazyDataCompression: xz
 Imports: 
     hypergeo,
     pracma,
-    bit64
+    bit64,
+    dplyr,
+    tidyr,
+    btools
+Remotes:
+    sodium-hydroxide/btools
 RoxygenNote: 7.3.1
 Depends: 
     R (>= 3.5.0)

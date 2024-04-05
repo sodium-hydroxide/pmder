@@ -1,6 +1,6 @@
 #' Predict absolute efficiency
 #'
-#' @param input_data Dataframe containing columns Es_keV, y_cm, contents.
+#' @param input_data Dataframe containing columns Es_keV, y_m, contents.
 #' These are respectively, the source energy in keV, the perpendicular
 #' distance in cm, and the contents ("m" for scrap metal and "f" for
 #' foodstuff).
@@ -10,18 +10,21 @@
 #' ugeom_efficiency, which are the absolute efficiency of detection and
 #' the geometric standard uncertainty.
 #' @export
+#' @importFrom utils data
+#' @importFrom stats pnorm
+#' @importFrom stats predict
 #'
 predict_efficiency <- function(
         input_data,
         method = "earth") {
 
     # Global Variables ----
-    y_cm <- NULL
+    y_m <- NULL
     Es_keV <- NULL
 
     # Function ----
 
-    if (F %in% (c("Es_keV", "y_cm", "contents") %in% names(input_data))) {
+    if (F %in% (c("Es_keV", "y_m", "contents") %in% names(input_data))) {
         return("Error! Dataframe must contain columns: Es_keV, d_cm, contents")
     }
 
@@ -47,7 +50,7 @@ predict_efficiency <- function(
         # Save predictor variables
         contents <- rep(0, nrow(input_data))
         contents[input_data$contents == "m"] <- 1
-        log_distances <- log(sqrt(input_data$y_cm^2 + 179.5^2))
+        log_distances <- log(sqrt(input_data$y_m^2 + 1.795^2))
         log_energy <- log(input_data$Es_keV)
 
         input_data$efficiency <- exp(
@@ -87,6 +90,7 @@ predict_efficiency <- function(
     }
 
     else if (method == "interpolate") {
+        data("spectral_data", envir = environment())
 
         all_energies <- unique(summary_data$Es_keV)
 
@@ -97,7 +101,7 @@ predict_efficiency <- function(
 
             current_subset <- subset(
                 summary_data,
-                y_cm == input_data$y_cm[i]
+                y_m == input_data$y_m[i]
                 & contents == input_data$contents[i])
 
             current_energy <- input_data$Es_keV[i]
@@ -146,17 +150,18 @@ predict_efficiency <- function(
     }
 
     else if (method == "earth") {
+        data("earth_model", envir = environment())
 
-        input_data$pos <- input_data$y_cm
-        input_data$y_cm <- abs(input_data$y_cm)
+        input_data$pos <- input_data$y_m
+        input_data$y_m <- abs(input_data$y_m)
 
-        earth_output <- stats::predict(
+        earth_output <- predict(
             earth_model,
             input_data,
             interval = "pint",
-            level = 2 * stats::pnorm(1) - 1)
+            level = 2 * pnorm(1) - 1)
 
-        input_data$y_cm <- input_data$pos
+        input_data$y_m <- input_data$pos
         input_data$pos <- NULL
 
         input_data$efficiency <- exp(earth_output$fit)

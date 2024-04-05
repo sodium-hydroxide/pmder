@@ -7,7 +7,7 @@
 predict_efficiency(input_data, method = "earth")
 }
 \arguments{
-\item{input_data}{Dataframe containing columns Es_keV, y_cm, contents.
+\item{input_data}{Dataframe containing columns Es_keV, y_m, contents.
 These are respectively, the source energy in keV, the perpendicular
 distance in cm, and the contents ("m" for scrap metal and "f" for
 foodstuff).}
