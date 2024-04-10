@@ -4,7 +4,13 @@
 #'
 #' @return a
 #' @export
-#'
+#' @importFrom dplyr all_of
+#' @importFrom dplyr select
+#' @importFrom dplyr group_by
+#' @importFrom dplyr summarise
+#' @importFrom dplyr group_by
+#' @importFrom dplyr across
+#' @importFrom dplyr arrange
 intrinsic_efficiency <- function(intrinsic_data) {
     # Check that intrinsic_data contains correct columns
     if (
@@ -31,12 +37,12 @@ intrinsic_efficiency <- function(intrinsic_data) {
     make_matrix <- function(column, fun, names = FALSE) {
         out_matrix <-
             intrinsic_data |>
-            dplyr::select(
-                dplyr::all_of("contents"),
-                dplyr::all_of("Es_keV"),
-                dplyr::all_of("Ed_keV"),
-                dplyr::all_of("y_m"),
-                dplyr::all_of(column)
+            select(
+                all_of("contents"),
+                all_of("Es_keV"),
+                all_of("Ed_keV"),
+                all_of("y_m"),
+                all_of(column)
             ) |>
             tidyr::pivot_wider(
                 names_from = "Es_keV",
@@ -52,10 +58,10 @@ intrinsic_efficiency <- function(intrinsic_data) {
 
         out_matrix <-
             out_matrix |>
-            dplyr::group_by(Ed_keV) |>
-            dplyr::summarise(dplyr::across(dplyr::all_of(data_cols), fun)) |>
-            dplyr::arrange(Ed_keV) |>
-            dplyr::select(-Ed_keV) |>
+            group_by(Ed_keV) |>
+            summarise(across(all_of(data_cols), fun)) |>
+            arrange(Ed_keV) |>
+            select(-Ed_keV) |>
             as.matrix() |>
             unname()
 
