@@ -1,10 +1,9 @@
-library(btools)
-package_load(
-    "readr",
-    "dplyr",
-    "stringr",
-    "tidyr"
-)
+
+devtools::load_all()
+library(readr)
+library(dplyr)
+library(stringr)
+library(tidyr)
 
 wd <- paste(
     getwd(),
@@ -80,13 +79,30 @@ spectral_parity_data <-
     ) |>
     as.data.frame() |>
     select(
-        "contents", "Es_keV", "Ed_keV", "y_m", "value", "u_value", "tally"
+        "contents", "Es_keV", "Ed_keV", "y_m",
+        "value", "u_value", "tally", "run_id",
+        "batch"
     ) |>
-    as_tibble() |>
+    as_tibble()
+
+# I accidentally changed naming conventions for the new data
+spectral_parity_data2 <-
+    rbind(
+        mutate(
+            filter(spectral_parity_data, batch != "original"),
+            Es_keV = Es_keV / 1000
+        ),
+        filter(spectral_parity_data, batch == "original")
+    )
+
+
+spectral_parity_data3 <-
+    spectral_parity_data2 |>
     pivot_wider(
         names_from = "tally",
         values_from = c("value", "u_value"),
-        id_cols = c("contents", "Es_keV", "Ed_keV", "y_m")
+        id_cols = c("contents", "Es_keV", "Ed_keV", "y_m", "run_id", "batch"),
+        values_fn = mean
     ) |>
     rename(
         LF1 = value_LF1,
@@ -124,7 +140,7 @@ spectral_parity_data <-
     )
 
 spectral_data <-
-    spectral_parity_data |>
+    spectral_parity_data3 |>
     mutate(
         F1 = 0.5 * (LF1 + RF1),
         F2 = 0.5 * (LF2 + RF2),
@@ -151,12 +167,11 @@ summary_data <-
     ) |>
     summarise(
         PrReach = sum(PrReach),
-        uPrReach = btools::rss(uPrReach),
+        uPrReach = (\(...) sqrt(sum(c(...) ^ 2)))(uPrReach),
         PrDet = sum(PrDet),
-        uPrDet = btools::rss(uPrDet)
+        uPrDet = (\(...) sqrt(sum(c(...) ^ 2)))(uPrDet)
     ) |>
     as.data.frame()
-
 
 write_csv(
     spectral_parity_data,

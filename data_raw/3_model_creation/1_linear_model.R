@@ -1,9 +1,6 @@
-library(btools)
-package_load(
-    "readr",
-    "broom",
-    "dplyr"
-)
+devtools::load_all()
+library(readr)
+library(dplyr)
 wd <- paste(
     getwd(),
     "/",
@@ -11,12 +8,41 @@ wd <- paste(
     sep = ""
 )
 
-load(paste(
-    getwd(),
-    "/",
-    "data/summary_data.rda",
-    sep = ""
-))
+data("spectral_data")
+
+lm_clean <- function(linear_model) {
+    # Clearing Global Variables ----
+    std.error <- NULL
+    p.value <- NULL
+    std_unc <- NULL
+    # Function ----
+    linear_model_aug <- tibble(data.frame(broom::augment(linear_model)))
+
+    covariance <- summary(linear_model)$cov.unscaled
+    stdev <- diag(covariance)
+    correlation <- covariance / sqrt(stdev %*% t(stdev))
+    colnames(correlation) <- paste("cor_", colnames(correlation), sep = "")
+    rownames(correlation) <- NULL
+
+    linear_model_tidy <-
+        linear_model |>
+        broom::tidy() |>
+        dplyr::mutate(r_sqr = summary(linear_model)$r.squared) |>
+        rename(std_unc = std.error, p_value = p.value) |>
+        cbind(correlation)
+
+    linear_model_tidy <- dplyr::relocate(
+        linear_model_tidy,
+        grep("cor", names(linear_model_tidy)),
+        .after = std_unc
+    )
+
+    return(list(
+        model = linear_model,
+        tidy = linear_model_tidy,
+        aug = linear_model_aug
+    ))
+}
 
 linear_model <-
     summary_data |>

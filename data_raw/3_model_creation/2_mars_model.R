@@ -1,12 +1,19 @@
 #----
-library(btools)
-package_load(
-    "readr",
-    "broom",
-    "dplyr",
-    "earth"
+
+
+devtools::load_all()
+library(readr)
+library(dplyr)
+library(earth)
+wd <- paste(
+    getwd(),
+    "/",
+    "data_raw/3_model_creation/",
+    sep = ""
 )
-load("data/summary_data.rda")
+
+data("spectral_data")
+
 
 mars_model_aug <-
     tibble(

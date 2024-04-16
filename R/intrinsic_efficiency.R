@@ -30,6 +30,12 @@ intrinsic_efficiency <- function(intrinsic_data) {
             sep = "\n"
         ))
     }
+    if (!"contents" %in% names(intrinsic_data)) {
+        intrinsic_data$contents <- "m"
+    }
+    if (!"y_m" %in% names(intrinsic_data)) {
+        intrinsic_data$y_m <- 0
+    }
     # Clear Global Variables ----
     Ed_keV <- NULL
     int_efficiency <- NULL
@@ -70,9 +76,9 @@ intrinsic_efficiency <- function(intrinsic_data) {
     # Function ----
     # Get matrices containing flux and pulse height data
     pulse <- make_matrix("F8", mean)
-    u_pulse <- make_matrix("u_F8", btools::rss)
+    u_pulse <- make_matrix("u_F8", (\(...) sqrt(sum(c(...) ^ 2))))
     flux <- make_matrix("F1", mean)
-    u_flux <- make_matrix("u_F1", btools::rss)
+    u_flux <- make_matrix("u_F1", (\(...) sqrt(sum(c(...) ^ 2))))
 
     # Calculate response function
     response <- pulse %*% (t(flux) %*% pracma::pinv(flux %*% t(flux)))

@@ -1,0 +1,70 @@
+ mcnp     ver=6.mpi, ld=07/01/21  04/15/24 22:30:28                   
+          Code Name & Version = MCNP_6.20, 6.2.0
+          Copyright LANS/LANL/DOE - see output file
+  
+     _/      _/        _/_/_/       _/      _/       _/_/_/         _/_/_/ 
+    _/_/  _/_/      _/             _/_/    _/       _/    _/     _/        
+   _/  _/  _/      _/             _/  _/  _/       _/_/_/       _/_/_/     
+  _/      _/      _/             _/    _/_/       _/           _/    _/    
+ _/      _/        _/_/_/       _/      _/       _/             _/_/       
+  
+  comment.  Physics models disabled.
+ m9   006000 -0.000747868606137262 $ C-nat                            
+  warning.  material        9 is not used in the problem.
+ comment. using random number generator  1, initial seed = 19073486328125      
+ 
+  comment.          38 surfaces were deleted for being the same as others.
+  warning.     1 energy bins of tally      111 are below energy cutoff.
+  warning.     1 energy bins of tally      112 are below energy cutoff.
+  warning.     1 energy bins of tally      114 are below energy cutoff.
+  warning.     1 energy bins of tally      121 are below energy cutoff.
+  warning.     1 energy bins of tally      122 are below energy cutoff.
+  warning.     1 energy bins of tally      124 are below energy cutoff.
+  warning.     1 energy bins of tally      211 are below energy cutoff.
+  warning.     1 energy bins of tally      212 are below energy cutoff.
+  warning.     1 energy bins of tally      214 are below energy cutoff.
+  warning.     1 energy bins of tally      221 are below energy cutoff.
+  warning.     1 energy bins of tally      222 are below energy cutoff.
+  warning.     1 energy bins of tally      224 are below energy cutoff.
+  warning.  Force analog capture for pulse-height tally variance reduction
+  comment.  Using pulse-height tally variance reduction.
+ imcn   is done
+
+  warning.  material        5 has been set to a conductor.
+  warning.  material        6 has been set to a conductor.
+  warning.  material        7 has been set to a conductor.
+
+ ctm =        0.00   nrn =                 0
+ dump    1 on file run_f_m500_87dot5   nps =           0   coll =                0
+ xact   is done
+
+ cp0 =   0.02
+ master starting     191 MPI slave tasks with       1 threads each  04/15/24 22:30:30 
+ master broadcasting static commons...
+ master broadcasting dynamic commons...
+ master broadcasting cross section data...
+ master completed initialization broadcasts.
+ master set rendezvous nps =   100000000,  work chunks =   191    04/15/24 22:30:30 
+ master set rendezvous nps =   200000000,  work chunks =   191    04/15/24 22:30:53 
+ master set rendezvous nps =   300000000,  work chunks =   191    04/15/24 22:31:17 
+ master set rendezvous nps =   400000000,  work chunks =   191    04/15/24 22:31:41 
+ master set rendezvous nps =   500000000,  work chunks =   191    04/15/24 22:32:04 
+ master set rendezvous nps =   600000000,  work chunks =   191    04/15/24 22:32:28 
+ master set rendezvous nps =   700000000,  work chunks =   191    04/15/24 22:32:51 
+ master set rendezvous nps =   800000000,  work chunks =   191    04/15/24 22:33:15 
+ master set rendezvous nps =   900000000,  work chunks =   191    04/15/24 22:33:39 
+ master set rendezvous nps =  1000000000,  work chunks =   191    04/15/24 22:34:02 
+      run terminated when  1000000000  particle histories were done.
+
+ =====>   15256.64 M histories/hr    (based on wall-clock time in mcrun)
+
+
+  warning.  random number period exceeded.  decrease stride.
+  warning.  tally      111 tfc bin did not pass  3 of 10 statistical checks.
+  warning.  tally      112 tfc bin did not pass  5 of 10 statistical checks.
+ additional error messages on file out_f_m500_87dot5.mcnpout
+
+ ctm =      699.18   nrn =      122207063467
+ dump    2 on file run_f_m500_87dot5   nps =  1000000000   coll =       8520385971
+ mcrun  is done
+
