@@ -20,89 +20,13 @@ raw_data <- read_csv(paste(
     sep = ""
 ))
 
-run_id_contents <- Vectorize(function(id) {
-    return(str_split_1(id, "_")[2])
-})
-
-run_id_y_m <- Vectorize(function(id) {
-    return(
-        gsub("m", "-", str_split_1(id, "_")[3]) |>
-            as.numeric() /
-            100
-        )
-})
-
-run_id_Es_keV <- Vectorize(function(id) {
-    return(
-        gsub("dot", "\\.", str_split_1(id, "_")[4]) |>
-            as.numeric() *
-            1000
-    )
-})
-
-tally_rename <- Vectorize(function(tally_val) {
-    tally_val <- str_split_1(tally_val, "")
-
-    new_name <- ""
-
-    if (tally_val[1] == "1") {
-        new_name <- paste(new_name, "L", sep = "")
-    }
-    else {
-        new_name <- paste(new_name, "R", sep = "")
-    }
-    if (tally_val[2] == "1") {
-        new_name <- paste(new_name, "F", sep = "")
-    }
-    else {
-        new_name <- paste(new_name, "sF", sep = "")
-    }
-
-    new_name <- paste(new_name, tally_val[3], sep = "")
-
-    return(new_name)
-})
-
-
-raw_data[
-    (raw_data$bin_mev == 0) & (raw_data$tally %in% c(118, 128, 218, 228)),
-]$value <- 0
 
 spectral_parity_data <-
     raw_data |>
-    mutate(
-        contents = as.factor(run_id_contents(run_id)),
-        y_m = run_id_y_m(run_id),
-        Es_keV = run_id_Es_keV(run_id),
-        Ed_keV = bin_mev * 1000,
-        tally = tally_rename(as.character(tally))
-    ) |>
-    as.data.frame() |>
-    select(
-        "contents", "Es_keV", "Ed_keV", "y_m",
-        "value", "u_value", "tally", "run_id",
-        "batch"
-    ) |>
-    as_tibble()
-
-# I accidentally changed naming conventions for the new data
-spectral_parity_data2 <-
-    rbind(
-        mutate(
-            filter(spectral_parity_data, batch != "original"),
-            Es_keV = Es_keV / 1000
-        ),
-        filter(spectral_parity_data, batch == "original")
-    )
-
-
-spectral_parity_data3 <-
-    spectral_parity_data2 |>
     pivot_wider(
         names_from = "tally",
         values_from = c("value", "u_value"),
-        id_cols = c("contents", "Es_keV", "Ed_keV", "y_m", "run_id", "batch"),
-        values_fn = mean
+        id_cols = c("contents", "Es_keV", "Ed_keV", "y_m", "run_id", "batch")
     ) |>
     rename(
         LF1 = value_LF1,
@@ -140,7 +64,7 @@ spectral_parity_data3 <-
     )
 
 spectral_data <-
-    spectral_parity_data3 |>
+    spectral_parity_data |>
     mutate(
         F1 = 0.5 * (LF1 + RF1),
         F2 = 0.5 * (LF2 + RF2),

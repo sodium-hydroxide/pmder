@@ -8,8 +8,6 @@ wd <- paste(
     sep = ""
 )
 
-data("spectral_data")
-
 lm_clean <- function(linear_model) {
     # Clearing Global Variables ----
     std.error <- NULL
@@ -46,6 +44,7 @@ lm_clean <- function(linear_model) {
 
 linear_model <-
     summary_data |>
+    filter(PrDet > 0 & Es_keV > 200) |>
     mutate(
         r_m = (sqrt(y_m^2 + 1.795^2)),
         PrReach = NULL,
@@ -54,7 +53,8 @@ linear_model <-
     ) |>
     lm(
         log(PrDet) ~ log(r_m) + log(Es_keV) + contents,
-        weights = weight
+        weights = weight,
+        data = _
     ) |>
     lm_clean()
 
@@ -63,4 +63,3 @@ save(linear_model, file = paste(
     "/data/linear_model.rda",
     sep = ""
 ))
-

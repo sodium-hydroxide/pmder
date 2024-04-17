@@ -12,9 +12,6 @@ wd <- paste(
     sep = ""
 )
 
-data("spectral_data")
-
-
 mars_model_aug <-
     tibble(
         `log(PrDet)` = log(summary_data$PrDet),
@@ -23,6 +20,7 @@ mars_model_aug <-
         contents = summary_data$contents,
         unc = summary_data$uPrDet
     ) |>
+    filter(is.finite(`log(PrDet)`)) |>
     mutate(unc = unc / exp(`log(PrDet)`)) |>
     mutate(`(weights)` = unc ^ (-2), unc = NULL)
 
@@ -36,7 +34,7 @@ mars_model <-
             + Es_keV:contents
             + Es_keV:log(sqrt(y_m^2 + 1.795^2))
         ),
-        data = summary_data,
+        data = filter(summary_data, PrDet > 0),
         varmod.method = "earth",
         weights = (PrDet / uPrDet)^2,
         nfold = 2,
