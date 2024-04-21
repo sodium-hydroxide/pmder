@@ -94,7 +94,7 @@ ggsave(
     paste(
         getwd(),
         "/",
-        "data_raw/4_figure_generation/",
+        "data_raw/4_figure_generation/gg/",
         "fig-methods-history_number.png",
         sep = ""
     ),

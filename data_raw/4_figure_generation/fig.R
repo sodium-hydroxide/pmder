@@ -3,14 +3,15 @@ library(ggplot2)
 
 
 
+
 ggsave(
     paste(
-        wd(),
+        getwd(),
         "/",
-        "data_raw/4_figure_generation/",
-        "fig-.png"
+        "data_raw/4_figure_generation/gg/",
+        "fig-.png",
+        sep = ""
     ),
-    plot = ,
     width = 7,
     height = 5,
     units = "in",
