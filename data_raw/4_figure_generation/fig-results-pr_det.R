@@ -1,9 +1,13 @@
 devtools::load_all()
 library(ggplot2)
 
-position_scales <- data.frame(
-    pos = -1 * c(0, 1, 2, 5, 7.5, 10, 15)
-)
+position_scales <- dplyr::mutate(data.frame(
+    pos = -1 * c(0, 1, 2, 5, 10, 15),
+    shape = c(15, 15, 16, 16, 17, 17),
+    line = c(
+        "solid", "longdash", "solid", "longdash", "solid", "longdash"
+    )),
+    label = as.character(abs(pos)))
 
 pr_det_en <-
     summary_data |>
@@ -12,7 +16,8 @@ pr_det_en <-
     ggplot(aes(
         x = Es_keV,
         y = PrDet,
-        color = as.factor(y_m)
+        shape = as.factor(y_m),
+        linetype = as.factor(y_m)
     )) +
     facet_grid(
         cols = vars(contents),
@@ -20,7 +25,7 @@ pr_det_en <-
             c("m"="Scrap Metal", "f"="Foodstuff")
         )
     ) +
-    geom_point(size = 1) +
+    geom_point(size = 1.5) +
     geom_line(linewidth = 0.5) +
     scale_y_continuous(
         name = "Pr{Detection}",
@@ -42,18 +47,22 @@ pr_det_en <-
         expand = c(0,0),
         n.breaks = 7
     ) +
-    scale_colour_viridis_d(
+    scale_shape_manual(
         name = latex2exp::TeX(
             "$y\\ (m)$"
         ),
-        breaks = position_scales$pos,
-        labels = as.character(abs(position_scales$pos)),
-        direction = -1,
-        begin = 0.1,
-        end = 0.8,
-        option = "G"
+        breaks = (position_scales$pos),
+        values = (position_scales$shape),
+        labels = position_scales$label
     ) +
-    guides(color = guide_legend()) +
+    scale_linetype_manual(
+        name = latex2exp::TeX(
+            "$y\\ (m)$"
+        ),
+        breaks = (position_scales$pos),
+        values = (position_scales$line),
+        labels = position_scales$label
+    ) +
     theme_bw() +
     theme(
         legend.position = "right",
@@ -66,8 +75,23 @@ pr_det_en <-
     ggtitle("Absolute Detection Efficiency")
 
 
+# Add color if wanted
+pr_det_en <-
+    pr_det_en +
+    scale_colour_viridis_d(
+        name = latex2exp::TeX(
+            "$y\\ (m)$"
+        ),
+        breaks = position_scales$pos,
+        labels = position_scales$label,
+        direction = -1,
+        begin = 0.1,
+        end = 0.8,
+        option = "G"
+    )
+
 energy_scales <- data.frame(
-    energy = c( 177.5, 350, 511, 661.6, 1022, 2000),
+    energy = c( 177.5, 350, 511, 661.6, 1173, 2000),
     shape = c(15, 15, 16, 16, 17, 17),
     line = c(
         "solid", "longdash", "solid", "longdash", "solid", "longdash"
@@ -160,10 +184,9 @@ summary_data |>
         mapping = aes(
         x = Es_keV,
         y = sqrt(y_m^2 + 1.795 ^ 2),
-        color = PrDet
+        alpha = PrDet
     ),
-    size = 100,
-    alpha = 0.05) +
+    size = 50) +
     scale_y_continuous(
         trans = "log10",
         name = "Distance (m)",
@@ -180,16 +203,13 @@ summary_data |>
         expand = c(0,0),
         n.breaks = 7
     ) +
-    scale_color_viridis_c(
+    scale_alpha_continuous(
         trans = "log10",
-        option = "F",
-        direction = -1,
         labels = scales::trans_format(
             "log10",
             scales::math_format(10^.x)
         ),
-        begin = 0.1,
-        end = 0.8,
-        n.breaks = 7
+        n.breaks = 7,
+        range = c(1e-6,2e-2)
     ) +
     theme_bw()

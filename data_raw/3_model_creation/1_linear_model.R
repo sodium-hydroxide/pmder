@@ -44,7 +44,7 @@ lm_clean <- function(linear_model) {
 
 linear_model <-
     summary_data |>
-    filter(PrDet > 0 & Es_keV > 200) |>
+    filter(PrDet > 0 & Es_keV > 300 & y_m <= 5) |>
     mutate(
         r_m = (sqrt(y_m^2 + 1.795^2)),
         PrReach = NULL,
@@ -57,6 +57,7 @@ linear_model <-
         data = _
     ) |>
     lm_clean()
+
 
 save(linear_model, file = paste(
     getwd(),
