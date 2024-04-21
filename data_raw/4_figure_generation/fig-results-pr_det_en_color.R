@@ -16,8 +16,7 @@ pr_det_en <-
     ggplot(aes(
         x = Es_keV,
         y = PrDet,
-        shape = as.factor(y_m),
-        linetype = as.factor(y_m)
+        color = as.factor(y_m)
     )) +
     facet_grid(
         cols = vars(contents),
@@ -47,21 +46,16 @@ pr_det_en <-
         expand = c(0,0),
         n.breaks = 7
     ) +
-    scale_shape_manual(
+    scale_colour_viridis_d(
         name = latex2exp::TeX(
             "$y\\ (m)$"
         ),
-        breaks = (position_scales$pos),
-        values = (position_scales$shape),
-        labels = position_scales$label
-    ) +
-    scale_linetype_manual(
-        name = latex2exp::TeX(
-            "$y\\ (m)$"
-        ),
-        breaks = (position_scales$pos),
-        values = (position_scales$line),
-        labels = position_scales$label
+        breaks = position_scales$pos,
+        labels = position_scales$label,
+        direction = -1,
+        begin = 0.1,
+        end = 0.8,
+        option = "G"
     ) +
     theme_bw() +
     theme(
@@ -80,7 +74,7 @@ ggsave(
         getwd(),
         "/",
         "data_raw/4_figure_generation/gg/",
-        "fig-results_pr_det_en.png",
+        "fig-results_pr_det_en_color.png",
         sep = ""
     ),
     plot = ,

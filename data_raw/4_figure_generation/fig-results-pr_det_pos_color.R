@@ -1,23 +1,22 @@
 devtools::load_all()
 library(ggplot2)
 
-position_scales <- dplyr::mutate(data.frame(
-    pos = -1 * c(0, 1, 2, 5, 10, 15),
+energy_scales <- data.frame(
+    energy = c( 177.5, 350, 511, 661.6, 1173, 2000),
     shape = c(15, 15, 16, 16, 17, 17),
     line = c(
         "solid", "longdash", "solid", "longdash", "solid", "longdash"
-    )),
-    label = as.character(abs(pos)))
+    )
+)
 
-pr_det_en <-
+pr_det_pos <-
     summary_data |>
-    dplyr::filter(PrDet > 1e-9) |>
-    dplyr::filter(y_m %in% position_scales$pos) |>
+    dplyr::filter(PrDet > 0) |>
+    dplyr::filter(Es_keV %in% energy_scales$energy) |>
     ggplot(aes(
-        x = Es_keV,
+        x = sqrt(y_m^2 + 1.79),
         y = PrDet,
-        shape = as.factor(y_m),
-        linetype = as.factor(y_m)
+        color = as.factor(Es_keV)
     )) +
     facet_grid(
         cols = vars(contents),
@@ -32,7 +31,7 @@ pr_det_en <-
         trans = "log10",
         limits = c(8e-9, 1.8e-2),
         expand = c(0,0),
-        n.breaks = 7,
+        n.breaks = 9,
         labels = scales::trans_format(
             "log10",
             scales::math_format(10^.x)
@@ -40,29 +39,18 @@ pr_det_en <-
     ) +
     scale_x_continuous(
         trans = "log10",
-        name = latex2exp::TeX(
-            "$E_{\\gamma, source}\\ (keV)$"
-        ),
-        limits = c(40,2090),
+        name = "Distance (m)",
+        limits = c(1.2, 17),
         expand = c(0,0),
         n.breaks = 7
     ) +
-    scale_shape_manual(
+    scale_color_viridis_d(
         name = latex2exp::TeX(
-            "$y\\ (m)$"
+            "$E_{\\gamma, source}\\ (keV)$"
         ),
-        breaks = (position_scales$pos),
-        values = (position_scales$shape),
-        labels = position_scales$label
+        breaks = rev(energy_scales$energy)
     ) +
-    scale_linetype_manual(
-        name = latex2exp::TeX(
-            "$y\\ (m)$"
-        ),
-        breaks = (position_scales$pos),
-        values = (position_scales$line),
-        labels = position_scales$label
-    ) +
+    guides(color = guide_legend(ncol = 2)) +
     theme_bw() +
     theme(
         legend.position = "right",
@@ -80,7 +68,7 @@ ggsave(
         getwd(),
         "/",
         "data_raw/4_figure_generation/gg/",
-        "fig-results_pr_det_en.png",
+        "fig-results_pr_det_pos.png",
         sep = ""
     ),
     plot = ,
