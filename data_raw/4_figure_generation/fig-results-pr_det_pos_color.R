@@ -68,7 +68,7 @@ ggsave(
         getwd(),
         "/",
         "data_raw/4_figure_generation/gg/",
-        "fig-results_pr_det_pos.png",
+        "fig-results_pr_det_pos_color.png",
         sep = ""
     ),
     plot = ,
