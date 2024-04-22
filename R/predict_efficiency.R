@@ -4,19 +4,16 @@
 #' These are respectively, the source energy in keV, the perpendicular
 #' distance in cm, and the contents ("m" for scrap metal and "f" for
 #' foodstuff).
-#' @param method `c("earth", "lm", "interpolate")` String, defaults to earth. Choose which model to use when predicting the intrinsic efficiency.
+#' @param method `c("mars", "lm", "interpolate")` String, defaults to earth. Choose which model to use when predicting the intrinsic efficiency.
 #'
 #' @return The original dataframe with additional columns efficiency and
 #' ugeom_efficiency, which are the absolute efficiency of detection and
 #' the geometric standard uncertainty.
 #' @export
-#' @importFrom utils data
-#' @importFrom stats pnorm
-#' @importFrom stats predict
 #'
 predict_efficiency <- function(
         input_data,
-        method = "earth") {
+        method = "mars") {
 
     # Global Variables ----
     y_m <- NULL
@@ -25,27 +22,38 @@ predict_efficiency <- function(
     # Function ----
 
     if (F %in% (c("Es_keV", "y_m", "contents") %in% names(input_data))) {
-        return("Error! Dataframe must contain columns: Es_keV, d_cm, contents")
+        stop("Error! Dataframe must contain columns: Es_keV, y_m, contents")
     }
 
     if (method == "lm") {
+
         # Parameters used in regression model, and their covariance matrix
         beta_hat <- list(
-            e0 = +7.084329e+00, # intercept term
-            e1 = +1.002321e+00, # contents term
-            e2 = -4.031355e+00, # distance term
-            e3 = +1.154673e+00) # energy term
+            e0 = linear_model$tidy$estimate[1], # intercept term
+            e1 = linear_model$tidy$estimate[4], # contents term
+            e2 = linear_model$tidy$estimate[2], # distance term
+            e3 = linear_model$tidy$estimate[3] # energy term
+        )
+
+        cov_beta_hat <- unname(as.matrix(linear_model$tidy[,4:7]))
+        stdev <- linear_model$tidy$std_unc
+
+        for (i in 1:4) {for (j in 1:4) {
+            cov_beta_hat[i,j] <-
+                cov_beta_hat[i,j] * stdev[i] * stdev[j]
+        }}
+
         cov_beta_hat <- list(
-            e00 = +2.736296e-02, # variance of intercept term
-            e01 = -6.007654e-05, # covariance between intercept and contents
-            e02 = -3.076598e-03, # covariance between intercept and position
-            e03 = -1.592928e-03, # covariance between intercept and energy
-            e11 = +1.607563e-04, # variance of contents term
-            e12 = -2.070185e-05, # covariance between contents and position
-            e13 = +7.392290e-06, # covariance between contents and energy
-            e22 = +6.094552e-04, # variance of position term
-            e23 = -1.618680e-05, # covariance between position and energy
-            e33 = +2.398123e-04) # variance of energy term
+            e00 = cov_beta_hat[1,1],# variance of intercept term
+            e01 = cov_beta_hat[1,4],# covariance between intercept and contents
+            e02 = cov_beta_hat[1,2],# covariance between intercept and position
+            e03 = cov_beta_hat[1,3],# covariance between intercept and energy
+            e11 = cov_beta_hat[4,4],# variance of contents term
+            e12 = cov_beta_hat[4,2],# covariance between contents and position
+            e13 = cov_beta_hat[4,3],# covariance between contents and energy
+            e22 = cov_beta_hat[2,2],# variance of position term
+            e23 = cov_beta_hat[2,3],# covariance between position and energy
+            e33 = cov_beta_hat[3,3])# variance of energy term
 
         # Save predictor variables
         contents <- rep(0, nrow(input_data))
@@ -90,7 +98,6 @@ predict_efficiency <- function(
     }
 
     else if (method == "interpolate") {
-        data("spectral_data", envir = environment())
 
         all_energies <- unique(summary_data$Es_keV)
 
@@ -149,25 +156,24 @@ predict_efficiency <- function(
         }
     }
 
-    else if (method == "earth") {
-        data("earth_model", envir = environment())
+    else if (method == "mars") {
 
         input_data$pos <- input_data$y_m
         input_data$y_m <- abs(input_data$y_m)
 
-        earth_output <- predict(
-            earth_model,
+        mars_output <- stats::predict(
+            mars_model,
             input_data,
             interval = "pint",
-            level = 2 * pnorm(1) - 1)
+            level = 2 * stats::pnorm(1) - 1)
 
         input_data$y_m <- input_data$pos
         input_data$pos <- NULL
 
-        input_data$efficiency <- exp(earth_output$fit)
+        input_data$efficiency <- exp(mars_output$fit)
 
         input_data$ugeom_efficiency <- (
-            0.5 * (earth_output$upr - earth_output$lwr)
+            0.5 * (mars_output$upr - mars_output$lwr)
         )
     }
 
