@@ -21,8 +21,14 @@ predict_efficiency <- function(
 
     # Function ----
 
-    if (F %in% (c("Es_keV", "y_m", "contents") %in% names(input_data))) {
-        stop("Error! Dataframe must contain columns: Es_keV, y_m, contents")
+    if (!"Es_keV" %in% names(input_data)) {
+        stop("Dataframe must contain column: Es_keV, the source energy.")
+    }
+    if (!"y_m" %in% names(input_data)) {
+        stop("Dataframe must contain column: y_m, the truck position.")
+    }
+    if (!"contents" %in% names(input_data)) {
+        stop("Dataframe must contain column: contents, the truck contents.")
     }
 
     if (method == "lm") {
@@ -162,7 +168,7 @@ predict_efficiency <- function(
         input_data$y_m <- abs(input_data$y_m)
 
         mars_output <- stats::predict(
-            mars_model,
+            mars_model$model,
             input_data,
             interval = "pint",
             level = 2 * stats::pnorm(1) - 1)
