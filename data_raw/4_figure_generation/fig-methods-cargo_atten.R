@@ -128,17 +128,43 @@ cargo_atten <-
         )
     )
 
-ggsave(
-    paste(
-        getwd(),
-        "/",
-        "data_raw/4_figure_generation/gg/",
-        "fig-methods-cargo_atten.png",
-        sep = ""
-    ),
-    plot = cargo_atten,
-    width = 7,
-    height = 5,
-    units = "in",
-    dpi = 1200
+
+# Save Images ----
+
+file_name <- paste(
+    getwd(),
+    "/data_raw/4_figure_generation/gg/fig-methods_cargo_atten",
+    sep=""
 )
+
+ggsave(
+    paste(file_name, ".eps", sep=""),
+    plot=cargo_atten,
+    device="eps",
+    width=5,
+    height=5,
+    units="in",
+    dpi=300,
+    bg='transparent'
+)
+ggsave(
+    paste(file_name, ".png", sep=""),
+    plot=cargo_atten,
+    device="png",
+    width=5,
+    height=5,
+    units="in",
+    dpi=300,
+    bg='transparent'
+)
+ggsave(
+    paste(file_name, ".tiff", sep=""),
+    plot=cargo_atten,
+    device="tiff",
+    width=5,
+    height= 5,
+    units="in",
+    dpi=300,
+    bg='transparent'
+)
+
