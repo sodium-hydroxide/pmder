@@ -1,91 +1,117 @@
 devtools::load_all()
 library(ggplot2)
 
-position_scales <- dplyr::mutate(data.frame(
-    pos = -1 * c(0, 1, 2, 5, 10, 15),
-    shape = c(15, 15, 16, 16, 17, 17),
-    line = c(
-        "solid", "longdash", "solid", "longdash", "solid", "longdash"
-    )),
-    label = as.character(abs(pos)))
-
+# Non Color Plot ----
 pr_det_en <-
     summary_data |>
     dplyr::filter(PrDet > 1e-9) |>
-    dplyr::filter(y_m %in% position_scales$pos) |>
+    dplyr::filter(y_m %in% c(0, -2, -5, -10, -15)) |>
+    dplyr::mutate(
+        y_m=as.factor(paste(
+            "y =",
+            as.character((y_m)),
+            "m"
+        ))
+    ) |>
     ggplot(aes(
-        x = Es_keV,
-        y = PrDet,
-        shape = as.factor(y_m),
-        linetype = as.factor(y_m)
+        x=Es_keV,
+        y=PrDet,
+        linetype=y_m,
+        label=y_m
     )) +
     facet_grid(
-        cols = vars(contents),
-        labeller = as_labeller(
+        rows=vars(contents),
+        labeller=as_labeller(
             c("m"="Scrap Metal", "f"="Foodstuff")
         )
     ) +
-    geom_point(size = 1.5) +
-    geom_line(linewidth = 0.5) +
+    geom_point(size=1.) +
+    geom_line(linewidth=0.5) +
     scale_y_continuous(
-        name = "Pr{Detection}",
-        trans = "log10",
-        limits = c(8e-9, 1.8e-2),
-        expand = c(0,0),
-        n.breaks = 7,
-        labels = scales::trans_format(
+        name="Pr{Detection}",
+        trans="log10",
+        limits=c(8e-9, 1.8e-2),
+        expand=c(0,0),
+        n.breaks=7,
+        labels=scales::trans_format(
             "log10",
             scales::math_format(10^.x)
         )
     ) +
     scale_x_continuous(
-        trans = "log10",
-        name = latex2exp::TeX(
+        trans="log10",
+        name=latex2exp::TeX(
             "$E_{\\gamma, source}\\ (keV)$"
         ),
-        limits = c(40,2090),
-        expand = c(0,0),
-        n.breaks = 7
-    ) +
-    scale_shape_manual(
-        name = latex2exp::TeX(
-            "$y\\ (m)$"
-        ),
-        breaks = (position_scales$pos),
-        values = (position_scales$shape),
-        labels = position_scales$label
+        limits=c(20,4000),
+        expand=c(0,0),
+        n.breaks=7
     ) +
     scale_linetype_manual(
-        name = latex2exp::TeX(
-            "$y\\ (m)$"
-        ),
-        breaks = (position_scales$pos),
-        values = (position_scales$line),
-        labels = position_scales$label
+        guide="none",
+        values=rep(1,6)
     ) +
+    directlabels::geom_dl(
+        #aes(label=y_m),
+        method=list(
+            directlabels::dl.combine("last.points"),
+            cex=0.7,
+            hjust=-0.2,
+            vjust=-0.1,
+            rot=-40
+        )
+    )+
+    # ggrepel::geom_label_repel(
+    #     aes(label=as.factor(y_m)),
+    #     nudge_x=1
+    # ) +
     theme_bw() +
     theme(
-        legend.position = "right",
-        legend.title = element_text(size=9),
-        legend.text = element_text(size=8),
-        strip.background = element_rect(
-            fill = "white"
+        legend.position="right",
+        legend.title=element_text(size=9),
+        legend.text=element_text(size=8),
+        strip.background=element_rect(
+            fill="white"
         )
     ) +
     ggtitle("Absolute Detection Efficiency")
 
 
+# Color Plot ----
+
+# Save Images ----
+
+file_name <- paste(getwd(),
+                   "/data_raw/4_figure_generation/gg/fig-results_pr_det_en",
+                   sep="")
+
 ggsave(
-    paste(
-        getwd(),
-        "/",
-        "data_raw/4_figure_generation/gg/",
-        "fig-results_pr_det_en.png",
-        sep = ""
-    ),
-    plot = ,
-    width = 7,
-    height = 5,
-    units = "in",
-    dpi = 1200
+    paste(file_name, ".eps", sep=""),
+    plot=pr_det_en,
+    device="eps",
+    width=6,
+    height=8,
+    units="in",
+    dpi=300,
+    bg='transparent'
+)
+ggsave(
+    paste(file_name, ".png", sep=""),
+    plot=pr_det_en,
+    device="png",
+    width=6,
+    height=8,
+    units="in",
+    dpi=300,
+    bg='transparent'
+)
+ggsave(
+    paste(file_name, ".tiff", sep=""),
+    plot=pr_det_en,
+    device="tiff",
+    width=6,
+    height= 8,
+    units="in",
+    dpi=300,
+    bg='transparent'
 )
