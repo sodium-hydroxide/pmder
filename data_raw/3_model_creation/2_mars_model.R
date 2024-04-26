@@ -14,14 +14,14 @@ wd <- paste(
 
 mars_model_aug <-
     tibble(
-        `log(PrDet)` = log(summary_data$PrDet),
-        `log(r_m)` = log(sqrt(summary_data$y_m^2 + 1.795^2)),
-        Es_keV = summary_data$Es_keV,
+        log.PrDet. = log(summary_data$PrDet),
+        log.r_m. = log(sqrt(summary_data$y_m^2 + 1.795^2)),
+        log.Es_keV. = log(summary_data$Es_keV),
         contents = summary_data$contents,
         unc = summary_data$uPrDet
     ) |>
-    filter(is.finite(`log(PrDet)`)) |>
-    mutate(unc = unc / exp(`log(PrDet)`)) |>
+    filter(is.finite(log.PrDet.)) |>
+    mutate(unc = unc / exp(log.PrDet.)) |>
     mutate(`(weights)` = unc ^ (-2), unc = NULL)
 
 mars_model <-
@@ -29,14 +29,17 @@ mars_model <-
         formula = (
             log(PrDet)
             ~ log(sqrt(y_m^2 + 1.795^2))
-            + Es_keV
+            + log(Es_keV)
             + contents
-            + Es_keV:contents
-            + Es_keV:log(sqrt(y_m^2 + 1.795^2))
+            + log(Es_keV):contents
+            + log(Es_keV):log(sqrt(y_m^2 + 1.795^2))
+            + log(sqrt(y_m^2 + 1.795^2)):contents
+            #+ (log(Es_keV) ^ 2)
+            #+ (log(sqrt(y_m^2 + 1.795^2)) ^ 2)
         ),
         data = filter(summary_data, PrDet > 0),
         varmod.method = "earth",
-        weights = (PrDet / uPrDet)^2,
+        #weights = (PrDet / uPrDet)^2,
         nfold = 2,
         ncross = 30
     )
