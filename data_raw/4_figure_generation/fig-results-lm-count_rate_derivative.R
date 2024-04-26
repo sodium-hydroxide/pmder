@@ -151,7 +151,7 @@ ggsave(
     plot=count_rate_derivative,
     device="tiff",
     width=5,
-    height= 8,
+    height= 5,
     units="in",
     dpi=300,
     bg='transparent'

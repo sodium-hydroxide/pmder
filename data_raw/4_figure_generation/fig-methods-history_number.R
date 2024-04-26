@@ -6,10 +6,10 @@ history_number <-
         position = rep(c(0,500, 1000, 1500), each = 1991),
         type = as.factor(rep(
             c(
-                "0 cm \u2264 |y| < 300 cm",
-                "300 cm \u2264 |y| < 800 cm",
-                "800 cm \u2264 |y| < 1300 cm",
-                "1300 cm \u2264 |y| < 2000 cm"
+                "0 m \u2264 |y| < 3 m",
+                "3 m \u2264 |y| < 8 m",
+                "8 m \u2264 |y| < 13 m",
+                "13 m \u2264 |y| < 20 m"
             ),
             each = 1991
         ))
@@ -71,7 +71,7 @@ history_number <-
     ) +
     scale_x_continuous(
         name = "Energy (keV)",
-        limits = c(1,2090),
+        limits = c(0,2090),
         expand = c(0,0)
     ) +
     scale_y_continuous(
@@ -90,17 +90,41 @@ history_number <-
         )
     )
 
+# Save Images ----
+
+file_name <- paste(
+    getwd(),
+    "/data_raw/4_figure_generation/gg/fig-methods-history_number",
+    sep=""
+)
+
 ggsave(
-    paste(
-        getwd(),
-        "/",
-        "data_raw/4_figure_generation/gg/",
-        "fig-methods-history_number.png",
-        sep = ""
-    ),
-    plot = history_number,
-    width = 7,
-    height = 5,
-    units = "in",
-    dpi = 1200
+    paste(file_name, ".eps", sep=""),
+    plot=history_number,
+    device="eps",
+    width=5,
+    height=5,
+    units="in",
+    dpi=300,
+    bg='transparent'
+)
+ggsave(
+    paste(file_name, ".png", sep=""),
+    plot=history_number,
+    device="png",
+    width=5,
+    height=5,
+    units="in",
+    dpi=300,
+    bg='transparent'
+)
+ggsave(
+    paste(file_name, ".tiff", sep=""),
+    plot=history_number,
+    device="tiff",
+    width=5,
+    height= 5,
+    units="in",
+    dpi=300,
+    bg='transparent'
 )
