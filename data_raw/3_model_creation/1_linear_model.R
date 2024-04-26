@@ -53,7 +53,7 @@ linear_model <-
     ) |>
     lm(
         log(PrDet) ~ log(r_m) + log(Es_keV) + contents,
-        weights = weight,
+        #weights = weight,
         data = _
     ) |>
     lm_clean()
