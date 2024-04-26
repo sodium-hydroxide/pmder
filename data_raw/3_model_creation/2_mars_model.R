@@ -34,12 +34,10 @@ mars_model <-
             + log(Es_keV):contents
             + log(Es_keV):log(sqrt(y_m^2 + 1.795^2))
             + log(sqrt(y_m^2 + 1.795^2)):contents
-            #+ (log(Es_keV) ^ 2)
-            #+ (log(sqrt(y_m^2 + 1.795^2)) ^ 2)
         ),
         data = filter(summary_data, PrDet > 0),
         varmod.method = "earth",
-        #weights = (PrDet / uPrDet)^2,
+        weights = (PrDet / uPrDet)^2,
         nfold = 2,
         ncross = 30
     )
