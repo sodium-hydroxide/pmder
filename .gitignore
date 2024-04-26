@@ -3,5 +3,4 @@
 .RData
 .Ruserdata
 .DS_Store
-data_raw/1_output_parsing/raw_data.csv
-data_raw/1_output_parsing/raw_data.csv
+data_raw/4_figure_generation/gg/
