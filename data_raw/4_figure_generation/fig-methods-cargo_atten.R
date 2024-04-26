@@ -110,7 +110,7 @@ cargo_atten <-
         )
     ) +
     ggplot2::scale_y_continuous(
-        name = "Attenuation Coefficienty (1 / cm)",
+        name = latex2exp::TeX("$Attenuation\\ Coefficient\\ (cm^{-1})$"),
         trans = "log10",
         limits = c(1e-2, 1e5),
         n.breaks = 10,
