@@ -181,7 +181,7 @@ predict_count_rate <- function(
             * output_data$count_rate
             / (
                 (output_data$y_m ^ 2)
-                + (179.5 ^ 2)
+                + (1.795 ^ 2)
             )
         )
     }
