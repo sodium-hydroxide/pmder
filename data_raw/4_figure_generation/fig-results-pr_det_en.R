@@ -4,67 +4,46 @@ library(ggplot2)
 # Non Color Plot ----
 pr_det_en <-
     summary_data |>
-    dplyr::filter(PrDet > 1e-9) |>
+    dplyr::filter(PrDet >= 1e-8) |>
     dplyr::filter(y_m %in% c(0, -2, -5, -10, -15)) |>
-    dplyr::mutate(
-        y_m=as.factor(paste(
-            "y =",
-            as.character((y_m)),
-            "m"
-        ))
-    ) |>
+    dplyr::mutate(position_label = Vectorize(function(.Es_keV, .y_m) {ifelse(
+        .Es_keV == 2000,
+        paste("y = ", as.character(.y_m), " m", sep = ""),
+        NA
+    )})(Es_keV, y_m)) |>
     ggplot(aes(
         x=Es_keV,
         y=PrDet,
-        linetype=y_m,
-        label=y_m
+        linetype=as.factor(y_m),
+        label=as.factor(position_label)
     )) +
     facet_grid(
         rows=vars(contents),
-        labeller=as_labeller(
-            c("m"="Scrap Metal", "f"="Foodstuff")
-        )
+        labeller=as_labeller(c("m"="Scrap Metal", "f"="Foodstuff"))
     ) +
     geom_point(size=1.) +
     geom_line(linewidth=0.5) +
     scale_y_continuous(
         name="Pr{Detection}",
         trans="log10",
-        limits=c(8e-9, 1.8e-2),
+        limits=c(8e-9, 2e-2),
         expand=c(0,0),
         n.breaks=7,
-        labels=scales::trans_format(
-            "log10",
-            scales::math_format(10^.x)
-        )
+        labels=scales::trans_format("log10",scales::math_format(10^.x))
     ) +
     scale_x_continuous(
         trans="log10",
-        name=latex2exp::TeX(
-            "$E_{\\gamma, source}\\ (keV)$"
-        ),
-        limits=c(20,4000),
+        name=latex2exp::TeX("$E_{\\gamma, source}\\ (keV)$"),
+        limits=c(40,2999),
         expand=c(0,0),
-        n.breaks=7
+        n.breaks=9
     ) +
-    scale_linetype_manual(
-        guide="none",
-        values=rep(1,6)
+    scale_linetype_manual(guide="none",values=rep(1,6)) +
+    ggrepel::geom_text_repel(
+        min.segment.length = 0, point.padding = 0, force = 0,
+        size = 3,
+        nudge_x = 0.1, nudge_y = -0.2, angle = -60, segment.size = 0.2
     ) +
-    directlabels::geom_dl(
-        #aes(label=y_m),
-        method=list(
-            directlabels::dl.combine("last.points"),
-            cex=0.7,
-            hjust=-0.2,
-            vjust=-0.1,
-            rot=-40
-        )
-    )+
-    # ggrepel::geom_label_repel(
-    #     aes(label=as.factor(y_m)),
-    #     nudge_x=1
-    # ) +
     theme_bw() +
     theme(
         legend.position="right",
