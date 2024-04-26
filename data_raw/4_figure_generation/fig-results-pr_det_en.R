@@ -81,9 +81,11 @@ pr_det_en <-
 
 # Save Images ----
 
-file_name <- paste(getwd(),
-                   "/data_raw/4_figure_generation/gg/fig-results_pr_det_en",
-                   sep="")
+file_name <- paste(
+    getwd(),
+    "/data_raw/4_figure_generation/gg/fig-results_pr_det_en",
+    sep=""
+)
 
 ggsave(
     paste(file_name, ".eps", sep=""),
