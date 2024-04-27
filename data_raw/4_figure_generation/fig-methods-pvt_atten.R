@@ -45,7 +45,7 @@ pvt_atten <-
         n.breaks=15
     ) +
     scale_y_continuous(
-        name="Interaction Coefficient (1/cm)",
+        name=latex2exp::TeX("$Attenuation\\ Coefficient\\ (cm^{-1})$"),
         transform="log10",
         limits=c(1e-1,1e4),
         expand=c(0,0),
